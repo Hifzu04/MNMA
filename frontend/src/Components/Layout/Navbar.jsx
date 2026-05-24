@@ -5,7 +5,7 @@ import SearchBar from '../Common/SearchBar'
 import Cartdrawer from './Cartdrawer'
 import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
-
+import logo from "../../assets/mnma_logo.png";
 function Navbar() {
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [navDrawerOpen, setNavDrawerOpen] = useState(false);
@@ -20,19 +20,37 @@ function Navbar() {
         <>
             <nav className=' container flex  mx-auto  items-center justify-between  px-6 py-4 '>
                 <div>
-                    <Link to="/" className='text-2xl font-medium'>MNMA</Link>
+                 <div>
+    <Link
+        to="/"
+        className="flex items-center gap-3"
+    >
+        <img
+            src={logo}
+            alt="MNMA Logo"
+            className="h-10 w-auto object-contain"
+        />
+
+        <h1 className="text-2xl font-bold tracking-wide text-black">
+            MNMA
+        </h1>
+    </Link>
+</div>
                 </div>
                 <div className='hidden md:flex  space-x-6 '>
-                    <Link to="#" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                     <Link to="/" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                        Home
+                    </Link>
+                    <Link to="/MensSection" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Men
                     </Link>
-                    <Link to="#" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                    <Link to="/WomensSection" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Women
                     </Link>
                     <Link to="#" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Top items
                     </Link>
-                    <Link to="#" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                    <Link to="/About" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         about us
                     </Link>
                 </div>

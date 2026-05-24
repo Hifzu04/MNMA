@@ -15,7 +15,7 @@ function GenderCollection() {
                         <h2 className='md:text-2xl text:md font-bold text-gray-900 md:mb-3'>
                             Men's Collection
                         </h2>
-                        <Link to="/collections/all?gender=men" className='text-gray-900 underline '>Shop Now</Link>
+                        <Link to="/MensSection" className='text-gray-900 underline '>Shop Now</Link>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@ function GenderCollection() {
                         <h2 className='md:text-2xl text:md font-bold text-gray-900 md:mb-3'>
                             Women's Collection
                         </h2>
-                        <Link to="/collections/all?gender=women" className='text-gray-900 underline '>Shop Now</Link>
+                        <Link to="/WomensSection" className='text-gray-900 underline '>Shop Now</Link>
                     </div>
                 </div>
 
