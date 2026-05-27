@@ -26,3 +26,17 @@ const userschema = new mongoose.Schema({
     }
 } , {timestamps:true})
 
+userschema.pre("save" , async function(){
+    if(!this.isModified("password")){
+        return
+    }
+
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password , salt)
+})
+
+userschema.methods.matchedpassword = async function(enteredpassword){
+ return await bcrypt.compare(enteredpassword , this.password)
+}
+const user = mongoose.model("user" , userschema)
+export default user
