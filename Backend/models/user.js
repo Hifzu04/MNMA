@@ -35,7 +35,7 @@ userschema.pre("save" , async function(){
     this.password = await bcrypt.hash(this.password , salt)
 })
 
-userschema.methods.matchedpassword = async function(enteredpassword){
+userschema.methods.checkpass = async function(enteredpassword){
  return await bcrypt.compare(enteredpassword , this.password)
 }
 const user = mongoose.model("user" , userschema)
