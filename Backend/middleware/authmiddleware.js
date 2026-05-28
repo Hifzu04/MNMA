@@ -6,7 +6,8 @@ const protect = async(req,res , next)=>{
         try {
             token = req.headers.authorization.split(" ")[1]
             const decode  = jwt.verify(token , process.env.JWT_SECRET)
-            req.user = await user.findById(decode.id).select("-password") 
+            console.log(decode);
+            req.user = await user.findById(decode.user.id).select("-password") 
             next()
         } catch (error) {
             console.error("Token verification failed",error)
