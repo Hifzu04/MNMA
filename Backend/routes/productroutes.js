@@ -78,4 +78,23 @@ productroute.put("/:id", protect, admin, async(req,res)=>{
     }
 })
 
+
+productroute.delete("/:id" , protect , admin , async(req,res)=>{
+    try {
+        const deletingproduct = await product.findById(req.params.id)
+        if(deletingproduct){
+            await deletingproduct.deleteOne();
+            res.json({message:"Product removed"})
+        }
+        else{
+return res.status(404).json({message:"Product not found"})
+        }
+    } catch (error) {
+          res.status(500).json({message:error.message})
+    }
+})
+
+
+
+
 export default productroute
