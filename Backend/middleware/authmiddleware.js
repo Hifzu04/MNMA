@@ -14,12 +14,5 @@ const protect = async(req,res , next)=>{
             res.status(401).json({message:"not authorized , no token provided"})
         }
 
-        if(!token){
-  return res.status(401).json({
-  success:false,
-  error:"Not authorized , no token" ,
-  statuscode:401
-  })
-}
 }
 export default protect
