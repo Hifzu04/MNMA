@@ -23,4 +23,59 @@ res.status(201).json(newproduct)
 }
 })
 
+
+productroute.put("/:id", protect, admin, async(req,res)=>{
+
+    try {
+
+        const {
+            name, description,price,discountprice,countinstock, category,
+            brand,
+            sizes,
+            colors,
+            collections,
+            material,
+            gender,images,isfeatured,ispublised,tags,dimensions, weight,sku
+        } = req.body
+
+        const findingproduct = await product.findById(req.params.id)
+
+        if(findingproduct){
+
+            findingproduct.name = name || findingproduct.name
+            findingproduct.description = description || findingproduct.description
+            findingproduct.price = price || findingproduct.price
+            findingproduct.discountprice = discountprice || findingproduct.discountprice
+            findingproduct.countinstock = countinstock || findingproduct.countinstock
+            findingproduct.category = category || findingproduct.category
+            findingproduct.brand = brand || findingproduct.brand
+            findingproduct.sizes = sizes || findingproduct.sizes
+            findingproduct.colors = colors || findingproduct.colors
+            findingproduct.collections = collections || findingproduct.collections
+            findingproduct.material = material || findingproduct.material
+            findingproduct.gender = gender || findingproduct.gender
+            findingproduct.images = images || findingproduct.images
+            findingproduct.isfeatured = isfeatured !== undefined ? isfeatured :  findingproduct.isfeatured
+            findingproduct.ispublised =  ispublised !== undefined ? ispublised :  findingproduct.ispublised
+            findingproduct.tags = tags || findingproduct.tags
+            findingproduct.dimensions = dimensions || findingproduct.dimensions
+            findingproduct.weight = weight || findingproduct.weight
+            findingproduct.sku = sku || findingproduct.sku
+
+            const updatedproduct = await findingproduct.save()
+
+            res.json(updatedproduct)
+
+        } else {
+
+            return res.status(404).json({message:"Product not found"})
+        }
+
+    } catch (error) {
+
+        res.status(500).json({message:error.message})
+
+    }
+})
+
 export default productroute
