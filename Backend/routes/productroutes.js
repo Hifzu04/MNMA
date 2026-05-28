@@ -1,9 +1,8 @@
 import express from "express"
 import product from "../models/product.js"
-import protect from "../middleware/authmiddleware.js"
-
+import {protect , admin} from "../middleware/authmiddleware.js"
 const productroute = express.Router();
-productroute.post("/" , protect , async(req, res)=>{
+productroute.post("/" , protect , admin , async(req, res)=>{
 try {
     const {name , description , price , discountprice , countinstock , category , brand , sizes, colors , collections , material , gender,
         images , isfeatured , ispublised , tags , dimensions , weight , sku } = req.body
