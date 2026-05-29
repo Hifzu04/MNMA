@@ -2,7 +2,7 @@ import express from "express"
 import user from "../models/user.js"
 import jwt from "jsonwebtoken"
 const authroute = express.Router()
-import protect from "../middleware/authmiddleware.js"
+import {protect} from "../middleware/authmiddleware.js"
 authroute.post("/register" , async(req,res)=>{
     const {name , email , password} = req.body
     try {
