@@ -95,6 +95,82 @@ return res.status(404).json({message:"Product not found"})
 })
 
 
+// get / api/products 
+// get all products  with optional query filters 
+
+productroute.get("/" , async(req,res)=>{  // collection - variable 
+    // collections -- db 
+    try {
+        const  {collection , size , color , gender , minprice , maxprice , sortby , search , category , material , brand , limit} = req.query
+        let query = {}
+
+if(collection && collection.toLocaleLowerCase()!=="all"){
+    query.collections = collection
+}
+if(category && category.toLowerCase()!=="all"){
+    query.category = category
+}
+ if(material){
+    query.material = {$in:material.split(",")}
+ }
+ if(brand){
+    query.brand = {$in:brand.split(",")}
+ } 
+ if(size){
+    query.sizes = {$in:size.split(",")}
+ } 
+ if(color){
+    query.colors= {$in:[color]}
+ } 
+ if(gender){
+    query.gender = gender
+ }
+
+
+ if(minprice || maxprice){
+    query.price = {}
+    if(minprice){
+        query.price.$gte = Number(minprice)
+    }
+       if(maxprice){
+        query.price.$lte = Number(maxprice)
+    }
+ }
+ if(search){
+    query.$or = [
+        {name:{$regex:search , $options:"i"}},
+         {description:{$regex:search , $options:"i"}}
+    ]
+ }
+ let sort = {}
+ if(sortby){
+    switch(sortby){
+        case "priceAsc":
+            sort={price:1}
+            break;
+               case "priceDesc":
+            sort={price:-1}
+            break;
+               case "popularity":
+            sort={rating:-1}
+            break;
+  default:break
+    }
+ }
+
+ let products = await product.find(query).sort(sort).limit(Number(limit)|| 0)
+res.json(products)
+
+    } 
+    
+    catch (error) {
+        console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+
+
 
 
 export default productroute
