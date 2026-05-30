@@ -104,7 +104,7 @@ productroute.get("/" , async(req,res)=>{  // collection - variable
         const  {collection , size , color , gender , minprice , maxprice , sortby , search , category , material , brand , limit} = req.query
         let query = {}
 
-if(collection && collection.toLocaleLowerCase()!=="all"){
+if(collection && collection.toLowerCase()!=="all"){
     query.collections = collection
 }
 if(category && category.toLowerCase()!=="all"){
@@ -168,6 +168,23 @@ res.json(products)
         res.status(500).send("Server error")
     }
 })
+
+productroute.get("/:id" , async(req,res)=>{
+    try {
+       const productgot = await product.findById(req.params.id)
+       if(productgot){
+        res.json(productgot)
+       }
+       else{
+        res.status(404).json({message:"Product not found"})
+       } 
+    } catch (error) {
+         console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+
 
 
 
