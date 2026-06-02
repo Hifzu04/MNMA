@@ -95,6 +95,157 @@ return res.status(404).json({message:"Product not found"})
 })
 
 
+// get / api/products 
+// get all products  with optional query filters 
+
+productroute.get("/" , async(req,res)=>{  // collection - variable 
+    // collections -- db 
+    try {
+        const  {collection , size , color , gender , minprice , maxprice , sortby , search , category , material , brand , limit} = req.query
+        let query = {}  // query is an object .. 
+
+if(collection && collection.toLowerCase()!=="all"){
+    query.collections = collection
+}
+if(category && category.toLowerCase()!=="all"){
+    query.category = category
+}
+ if(material){
+    query.material = {$in:material.split(",")}  // Multiple possible values → split() + $in  ,, query.material = {
+ // $in: ["Cotton", "Wool", "Linen"]
+ } 
+ if(brand){
+    query.brand = {$in:brand.split(",")}
+ } 
+ if(size){
+    query.sizes = {$in:size.split(",")}
+ } 
+ if(color){
+    query.colors= {$in:[color]} 
+ } 
+ if(gender){
+    query.gender = gender
+ }
+
+
+ if(minprice || maxprice){
+    query.price = {}
+    if(minprice){
+        query.price.$gte = Number(minprice)
+    }
+       if(maxprice){
+        query.price.$lte = Number(maxprice)
+    }
+ }
+ if(search){
+    query.$or = [
+        {name:{$regex:search , $options:"i"}},  // i - case insensitive 
+         {description:{$regex:search , $options:"i"}}
+    ]
+ }
+ let sort = {}
+ if(sortby){
+    switch(sortby){
+        case "priceAsc":
+            sort={price:1}
+            break;
+               case "priceDesc":
+            sort={price:-1}
+            break;
+               case "popularity":
+            sort={rating:-1}
+            break;
+  default:break
+    }
+ }
+
+ let products = await product.find(query).sort(sort).limit(Number(limit)|| 0)
+res.json(products)
+
+    } 
+    
+    catch (error) {
+        console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+productroute.get("/best-seller" , async(req,res)=>{
+    try {
+        const bestseller = await product.findOne().sort({rating:-1})
+        if(bestseller){
+            res.json(bestseller)
+        }
+        else{
+             res.status(404).json({message:" no best seller  found"})
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+productroute.get("/new-arrivals" , async(req , res)=>{
+    try {
+        const newarrival = await product.find().sort({createdAt:-1}).limit(8)
+        if(newarrival){
+            res.json(newarrival)
+        }
+        else{
+             res.status(404).json({message:" no new arrival  found"})
+        }
+    } catch (error) {
+         console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+
+productroute.get("/:id" , async(req,res)=>{
+   
+    try {
+       const productgot = await product.findById(req.params.id)
+       if(productgot){
+        res.json(productgot)
+       }
+       else{
+        res.status(404).json({message:"Product not found"})
+       } 
+    } 
+    catch (error) {
+         console.error(error)
+        res.status(500).send("Server error")
+    }
+})
+
+
+productroute.get("/similar/:id", async (req, res) => {
+   
+    const id = req.params.id
+    try {
+        const findingproduct = await product.findById(id)
+        if(!findingproduct){
+            return res.status(404).json({message:"product not found"})
+        }
+        const similarproduct =  await product.find({
+            _id:{$ne :id}, // exclude the current product id 
+            gender:findingproduct.gender,
+            category:findingproduct.category
+
+        }).limit(4)
+        res.json(similarproduct)
+    } catch (error) {
+        console.error(error)
+
+        res.status(500).json({message:"server error"})
+    }
+});
+
+
+
+
+
+
 
 
 export default productroute
