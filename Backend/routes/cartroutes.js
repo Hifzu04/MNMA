@@ -13,7 +13,7 @@ const cartroute = express.Router();
 // Finds or creates the cart for a user / guest
 // ─────────────────────────────────────────────
 const getCart = async (userId, guestId) => {
-    
+
     if (userId) {
         let existingCart = await cart.findOne({ user: userId });
         if (existingCart) return existingCart;
@@ -121,9 +121,9 @@ cartroute.post("/", async (req, res) => {
 //           guest:     pass guestId as query param
 // ─────────────────────────────────────────────
 cartroute.get("/", async (req, res) => {
-    const {  userId ,guestId } = req.query
-   console.log(guestId)
-   console.log(userId)
+    const { userId, guestId } = req.query
+    //console.log(guestId)
+    //console.log(userId)
     //  if (!userId && !guestId) {
     //      return res.status(400).json({ message: "Either guest ID is missing or usreID id" });
     //  }
@@ -235,7 +235,7 @@ cartroute.delete("/", async (req, res) => {
 // ─────────────────────────────────────────────
 cartroute.post("/merge", protect, async (req, res) => {
     const { guestId } = req.body;
-    const userId = req.user._id;
+
 
     if (!guestId) {
         return res.status(400).json({ message: "guestId is required" });
@@ -243,34 +243,54 @@ cartroute.post("/merge", protect, async (req, res) => {
 
     try {
         const guestCart = await cart.findOne({ guestId });   // uses updated schema field
-        const userCart = await getCart(userId, null);
-
-        if (!guestCart || guestCart.products.length === 0) {
-            return res.json({ message: "No guest cart to merge", cart: userCart });
-        }
-
-        guestCart.products.forEach((guestItem) => {
-            const itemIndex = userCart.products.findIndex(
-                (p) =>
-                    p.productid.toString() === guestItem.productid.toString() &&
-                    p.size === guestItem.size &&
-                    p.color === guestItem.color
-            );
-
-            if (itemIndex > -1) {
-                userCart.products[itemIndex].quantity += guestItem.quantity;
-            } else {
-                userCart.products.push(guestItem);
+        const userCart = await cart.findOne({ user: req.user._id });
+        if (guestCart) {
+            if (guestCart.products.length === 0) {
+                return res.json({ message: "No guest cart to merge or its empty", cart: userCart });
             }
-        });
+            if (userCart) {
 
-        userCart.totalprice = recalcTotal(userCart.products);
-        await userCart.save();
+                guestCart.products.forEach((guestItem) => {
+                    const itemIndex = userCart.products.findIndex(
+                        (p) =>
+                            p.productid.toString() === guestItem.productid.toString() &&
+                            p.size === guestItem.size &&
+                            p.color === guestItem.color
+                    );
+                    if (itemIndex > -1) {
+                        //If item exist in the cart update the quantity
+                        userCart.products[itemIndex].quantity += guestItem.quantity;
+                    } else {
+                        userCart.products.push(guestItem);
+                    }
+                });
+                userCart.totalprice = recalcTotal(userCart.products);
+                await userCart.save();
+                try {
+                    await cart.findOneAndDelete({ guestId });
+                } catch (error) {
+                    console.error("Error deleting guest cart:", error);
 
-        await cart.findByIdAndDelete(guestCart._id);
+                }
+                res.status(200).json(userCart);
+            } else {
+                //if user has no existing cart , assign the guest cart to the user
+                guestCart.user = req.user._id;
+                guestCart.guestId = undefined;
+                await guestCart.save();
+                res.status(200).json(guestCart)
+            }
 
-        res.json({ message: "Guest cart merged successfully", cart: userCart });
-    } catch (error) {
+        } else {
+            if (userCart) {
+                //Guest cart has already been merged return user cart
+                return res.status(200).json(userCart)
+            }
+
+            res.status(404).json({ message: "Guest cart not found" });
+        }
+    }
+    catch (error) {
         console.error("Merge cart error:", error);
         res.status(500).json({ message: "Server error" });
     }
