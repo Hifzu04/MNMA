@@ -32,8 +32,16 @@ const getCart = async (userId, guestId) => {
 // ─────────────────────────────────────────────
 // HELPER – recalcTotal
 // ─────────────────────────────────────────────
-const recalcTotal = (products) =>
-    products.reduce((sum, item) => sum + (parseFloat(item.price) || 0) * item.quantity, 0);
+const recalcTotal = (products) => {
+    let sum = 0;
+
+    for (const item of products) {
+        const price = parseFloat(item.price) || 0;
+        sum += price * item.quantity;
+    }
+
+    return sum;
+};
 
 
 // ─────────────────────────────────────────────
@@ -42,7 +50,7 @@ const recalcTotal = (products) =>
 // Body: { productid, quantity?, size, color, guestId? }
 //   guestId is optional – auto-generated if missing
 // ─────────────────────────────────────────────
-cartroute.post("/", async (req, res) => {
+cartroute.post("/", async (req, res) => {   // customer adding a product to card 
     const { productid, quantity, size, color, guestId, userId } = req.body;
 
 
@@ -51,18 +59,18 @@ cartroute.post("/", async (req, res) => {
     }
 
     try {
-        const product = await productmodel.findById(productid);
+        const product = await productmodel.findById(productid);  // is this product available 
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
         }
 
-        const existingCart = await getCart(userId, guestId);
+        const existingCart = await getCart(userId, guestId);  // getting the existing cart of that user 
 
         // Check if same product + size + color already in cart
         if (existingCart) {
             const itemIndex = existingCart.products.findIndex(
                 (p) =>
-                    p.productid.toString() === productid.toString() &&
+                    p.productid.toString() === productid.toString() &&  // MongoDB IDs are ObjectIds so converted to string 
                     p.size === size &&
                     p.color === color
             );
@@ -173,7 +181,7 @@ cartroute.put("/", async (req, res) => {
             return res.status(404).json({ message: "Item not found in cart" });
         } else {
             if (quantity > 0) {
-                existingCart.products[itemIndex].quantity = quantity;
+                existingCart.products[itemIndex].quantity = quantity;  // directly updating what frontend is sending 
             } else {
                 existingCart.products.splice(itemIndex, 1); //remove prd if quantity is 0
             }
@@ -204,8 +212,8 @@ cartroute.delete("/", async (req, res) => {
         const existingCart = await getCart(userId, guestId);
         if (!existingCart) return res.status(404).json({ message: "cart not found" });
 
-        const initialLength = existingCart.products.length;
-        existingCart.products = existingCart.products.filter(
+        const initialLength = existingCart.products.length;  // how many products were there 
+        existingCart.products = existingCart.products.filter(  // keep all product except the one we want to delete 
             (p) =>
                 !(
                     p.productid.toString() === productid.toString() &&
@@ -214,7 +222,7 @@ cartroute.delete("/", async (req, res) => {
                 )
         );
 
-        if (existingCart.products.length === initialLength) {
+        if (existingCart.products.length === initialLength) {  // if after filtering the no of pro is same as before fil means no deleting prd found
             return res.status(404).json({ message: "Item not found in cart" });
         }
 
@@ -260,8 +268,9 @@ cartroute.post("/merge", protect, async (req, res) => {
                     if (itemIndex > -1) {
                         //If item exist in the cart update the quantity
                         userCart.products[itemIndex].quantity += guestItem.quantity;
-                    } else {
-                        userCart.products.push(guestItem);
+                    } 
+                    else {
+                        userCart.products.push(guestItem); // else push the guestcart item to usercart
                     }
                 });
                 userCart.totalprice = recalcTotal(userCart.products);
@@ -275,8 +284,8 @@ cartroute.post("/merge", protect, async (req, res) => {
                 res.status(200).json(userCart);
             } else {
                 //if user has no existing cart , assign the guest cart to the user
-                guestCart.user = req.user._id;
-                guestCart.guestId = undefined;
+                guestCart.user = req.user._id;  // userid which was ND earlier is not defined 
+                guestCart.guestId = undefined;  // and now changing guestid to ND 
                 await guestCart.save();
                 res.status(200).json(guestCart)
             }
