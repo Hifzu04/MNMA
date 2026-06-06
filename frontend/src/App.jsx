@@ -7,7 +7,8 @@ import Home from './Pages/Home'
 import About from './Pages/About'
 import MensSection from './Pages/MensSection'
 import WomensSection from './Pages/WomensSection'
-
+import Signuppage from './Pages/SignupPage.jsx'
+import Signinpage from './Pages/SigninPage.jsx'
 function App() {
 
   return (
@@ -22,7 +23,10 @@ function App() {
           <Route path='about' element={<About />} />
              <Route path='MensSection' element={<MensSection />} />
              <Route path='WomensSection' element={<WomensSection />} />
-
+             
+              {/* need to render in protect route */}
+               <Route path='SignupPage' element={<Signuppage />} />
+                <Route path='SigninPage' element={<Signinpage />} />
         </Route>
 
         {/* admin routes */}
