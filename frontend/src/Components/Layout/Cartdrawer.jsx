@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { IoMdClose } from 'react-icons/io';
 import CartContents from '../Cart/CartContents';
-
+import { Link } from 'react-router-dom';
 
 
 const Cartdrawer = ({ drawerOpen, toggleCartDrawer }) => {
@@ -27,7 +27,9 @@ const Cartdrawer = ({ drawerOpen, toggleCartDrawer }) => {
 
             {/* checkout buttton fixed at the bottom */}
             <div className='p-4 bg-white sticky bottom-0'>
-                <button className='w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition'>Checkout</button>
+                <Link to="/SigninPage">
+                    <button className='w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition'>Checkout</button>
+                </Link>
                 <p className='text-sm tracking-tighter text-gray-500 mt-2 text-center'>Shipping, taxes, and discount codes calculated at checkout.</p>
             </div>
 

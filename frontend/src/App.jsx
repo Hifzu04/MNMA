@@ -9,6 +9,8 @@ import MensSection from './Pages/MensSection'
 import WomensSection from './Pages/WomensSection'
 import Signuppage from './Pages/SignupPage.jsx'
 import Signinpage from './Pages/SigninPage.jsx'
+import CheckoutPage from './Pages/CheckoutPage.jsx'
+import Profile from './Pages/Profile.jsx'
 function App() {
 
   return (
@@ -27,6 +29,8 @@ function App() {
               {/* need to render in protect route */}
                <Route path='SignupPage' element={<Signuppage />} />
                 <Route path='SigninPage' element={<Signinpage />} />
+                <Route path='CheckoutPage' element={<CheckoutPage />} />
+                 <Route path='profile' element={<Profile />} />
         </Route>
 
         {/* admin routes */}

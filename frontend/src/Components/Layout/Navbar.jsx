@@ -47,7 +47,7 @@ function Navbar() {
                     <Link to="/WomensSection" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Women
                     </Link>
-                    <Link to="/SignupPage" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                    <Link to="/CheckoutPage" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Top items
                     </Link>
                     <Link to="/About" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
