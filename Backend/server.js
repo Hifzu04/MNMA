@@ -6,6 +6,9 @@ import authroute from "./routes/userroutes.js"
 import productroute from "./routes/productroutes.js"
 import cartroute from "./routes/cartroutes.js"
 import { uploadroute } from "./routes/uploadroutes.js"
+import checkoutroute from "./routes/checkoutroutes.js"
+import orderroute from "./routes/orderroutes.js"
+
 dotenv.config()
 
 const app = express()
@@ -19,6 +22,9 @@ app.use("/api/user", authroute)
 app.use("/api/products", productroute)
 app.use("/api/cart", cartroute)
 app.use("/api/upload" ,uploadroute )
+app.use("/api/checkout", checkoutroute)
+app.use("/api/orders", orderroute)
+
 app.get("/", (req, res) => {
     res.send("WELCOME")
 })
