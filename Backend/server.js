@@ -5,6 +5,8 @@ import connectdb from "./Config/db.js"
 import authroute from "./routes/userroutes.js"
 import productroute from "./routes/productroutes.js"
 import cartroute from "./routes/cartroutes.js"
+import checkoutroute from "./routes/checkoutroutes.js"
+import orderroute from "./routes/orderroutes.js"
 
 dotenv.config()
 
@@ -18,6 +20,8 @@ connectdb()
 app.use("/api/user", authroute)
 app.use("/api/products", productroute)
 app.use("/api/cart", cartroute)
+app.use("/api/checkout", checkoutroute)
+app.use("/api/orders", orderroute)
 
 app.get("/", (req, res) => {
     res.send("WELCOME")
