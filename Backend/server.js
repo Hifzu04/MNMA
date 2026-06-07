@@ -9,6 +9,7 @@ import { uploadroute } from "./routes/uploadroutes.js"
 import checkoutroute from "./routes/checkoutroutes.js"
 import orderroute from "./routes/orderroutes.js"
 import subrouter from "./routes/subscriberroute.js"
+import adminrouter from "./routes/adminroutes.js"
 dotenv.config()
 
 const app = express()
@@ -25,6 +26,7 @@ app.use("/api/upload" ,uploadroute )
 app.use("/api/checkout", checkoutroute)
 app.use("/api/orders", orderroute)
 app.use("/api/" , subrouter)
+app.use("/api/admin/users" , adminrouter)
 app.get("/", (req, res) => {
     res.send("WELCOME")
 })
