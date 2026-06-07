@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function CheckoutPage() {
     // hardcoded cart items for demo, in real application this will come from global state or backend.. d
@@ -153,10 +154,11 @@ export default function CheckoutPage() {
                 <span>₹{total}</span>
               </div>
             </div>
-
+            <Link to="/order-confirmation" className="w-full block mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold text-center hover:bg-blue-700 transition">
             <button className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
               Place Order
             </button>
+            </Link>
           </div>
         </div>
       </div>

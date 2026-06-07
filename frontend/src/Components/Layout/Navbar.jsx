@@ -6,7 +6,10 @@ import Cartdrawer from './Cartdrawer'
 import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import logo from "../../assets/mnma_logo.png";
+import { useNavigate } from "react-router-dom";
+
 function Navbar() {
+    const navigate = useNavigate();
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [navDrawerOpen, setNavDrawerOpen] = useState(false);
     const toggleCartDrawer = () => {
@@ -47,13 +50,20 @@ function Navbar() {
                     <Link to="/WomensSection" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Women
                     </Link>
-                    <Link to="/CheckoutPage" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
+                    <Link to="/TopItems" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         Top items
                     </Link>
                     <Link to="/About" className='text-gray-700 hover:text-black text-sm font-medium uppercase '>
                         about us
                     </Link>
                 </div>
+                 
+          <button
+         onClick={() => navigate("/admin")}
+             className="bg-black text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
+        >
+                Admin
+          </button>
                 <div className='flex items-center space-x-4'>
                     <Link to="/profile" className='hover:text-black'>
                         <HiOutlineUser className='h-6 w-6 text-gray-700' />
