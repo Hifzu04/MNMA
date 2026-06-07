@@ -57,14 +57,16 @@ function Navbar() {
                         about us
                     </Link>
                 </div>
-                 
+       
+          
+                <div className='flex items-center space-x-4'>
+                         
           <button
-         onClick={() => navigate("/admin")}
-             className="bg-black text-white px-5 py-2 rounded-lg font-medium shadow-md hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
+         onClick={() => navigate("/admin/dashboard")}
+             className="bg-black text-white px-4   py-2 rounded-lg font-medium shadow-md hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
         >
                 Admin
           </button>
-                <div className='flex items-center space-x-4'>
                     <Link to="/profile" className='hover:text-black'>
                         <HiOutlineUser className='h-6 w-6 text-gray-700' />
                     </Link>
