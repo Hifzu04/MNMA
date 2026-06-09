@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const orderItemSchema = new mongoose.Schema({
+const orderItemSchema = new mongoose.Schema({  // schema of product ordered 
     productid: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
@@ -17,7 +17,7 @@ const orderItemSchema = new mongoose.Schema({
     }
 }, { _id: false });
 
-const orderSchema = new mongoose.Schema({
+const orderSchema = new mongoose.Schema({  // schema of order containing all products order+ payment + user id ... 
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
@@ -79,3 +79,4 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema);
 export default Order;
+

@@ -13,7 +13,7 @@ adminrouter.get("/" , protect , admin , async(req , res)=>{   // getting  all (o
     }
 })
 
-adminrouter.post("/" , protect , admin , async(req , res)=>{   // adding a new user  (only admin )
+adminrouter.post("/" , protect , admin , async(req , res)=>{   // adding a new user 
    const {name , email , password , role} = req.body
     try {
         let specificadmin  = await user.findOne({email})
