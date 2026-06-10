@@ -1,10 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 
-// User Layout
 import UserLayout from "./Components/Layout/UserLayout";
 
-// User Pages
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import MensSection from "./Pages/MensSection";
@@ -16,13 +14,15 @@ import SigninPage from "./Pages/SigninPage";
 import CheckoutPage from "./Pages/CheckoutPage";
 import OrderConfirmationPage from "./Pages/OrderConfirmationPage";
 
-// Admin Pages
 import AdminDashboard from "./Admin/AdminDashboard";
 import AdminPage from "./Admin/AdminPage";
 import UserManagement from "./Admin/UserManagement";
 import ProductManagement from "./Admin/ProductManagement";
 import OrderManagement from "./Admin/OrderManagement";
 import ShopManagement from "./Admin/ShopManagement";
+
+import ProtectedRoute from "./Components/ProtectedRoute";
+import AdminRoute from "./Components/AdminRoute";
 
 function App() {
   return (
@@ -36,22 +36,48 @@ function App() {
           <Route path="MensSection" element={<MensSection />} />
           <Route path="WomensSection" element={<WomensSection />} />
           <Route path="TopItems" element={<TopItems />} />
-          <Route path="profile" element={<Profile />} />
+
+          <Route
+            path="profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
 
           <Route path="SignupPage" element={<SignupPage />} />
           <Route path="SigninPage" element={<SigninPage />} />
-          <Route path="CheckoutPage" element={<CheckoutPage />} />
+
+          <Route
+            path="CheckoutPage"
+            element={
+              <ProtectedRoute>
+                <CheckoutPage />
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="order-confirmation"
-            element={<OrderConfirmationPage />}
+            element={
+              <ProtectedRoute>
+                <OrderConfirmationPage />
+              </ProtectedRoute>
+            }
           />
         </Route>
 
         {/* Admin Routes */}
-           
-        <Route path="admin" element={<AdminPage />}>
-        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
+          }
+        >
+          <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="users" element={<UserManagement />} />
           <Route path="products" element={<ProductManagement />} />
           <Route path="orders" element={<OrderManagement />} />

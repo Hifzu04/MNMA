@@ -1,49 +1,63 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { ShoppingBag } from "lucide-react";
 
 export default function TopItems() {
-  const topItems = [
-    {
-      id: 1,
-      name: "Classic Leather Jacket",
-      price: 1999.99,
-      image: "https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500",
-    },
-    {
-      id: 2,
-      name: "Casual Denim Jacket",
-      price: 2000.5,
-      image: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500",
-    },
-    {
-      id: 3,
-      name: "Premium Hoodie",
-      price: 1499.99,
-      image: "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=500",
-    },
-    {
-      id: 4,
-      name: "Cotton T-Shirt",
-      price: 799.99,
-      image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=500",
-    },
-    {
-      id: 5,
-      name: "Slim Fit Jeans",
-      price: 1799.99,
-      image: "https://images.unsplash.com/photo-1542272604-787c3835535d?w=500",
-    },
-    {
-      id: 6,
-      name: "Sports Sneakers",
-      price: 2499.99,
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500",
-    },
-  ];
+  const [topItems, setTopItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const fetchBestSellers = async () => {
+      try {
+        setLoading(true);
+
+        const { data } = await axios.get(
+          "http://localhost:5000/api/products/best-seller"
+        );
+
+        console.log("API RESPONSE:", data);
+
+        // Always ensure array
+        setTopItems(Array.isArray(data) ? data : [data]);
+
+      } catch (error) {
+        console.error("Error fetching best sellers:", error);
+        setError("Failed to load products");
+        setTopItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBestSellers();
+  }, []);
+
+  // IMAGE HELPER
+  const getImageUrl = (product) => {
+    return product.images?.[0]?.url || "https://via.placeholder.com/300";
+  };
+
+  if (loading) {
+    return (
+      <div className="text-center py-20 text-gray-500">
+        Loading top products...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-20 text-red-500">
+        {error}
+      </div>
+    );
+  }
 
   return (
     <section className="py-12 px-6 bg-gray-50">
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Heading */}
         <div className="text-center mb-10">
           <h2 className="text-4xl font-bold text-gray-900">
@@ -55,34 +69,49 @@ export default function TopItems() {
         </div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {topItems.map((item) => (
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+
+          {topItems.map((product) => (
             <div
-              key={item.id}
-              className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition duration-300"
+              key={product._id}
+              className="group rounded-[28px] bg-white shadow-sm hover:-translate-y-2 transition"
             >
-              <img
-                src={item.image}
-                alt={item.name}
-                className="w-full h-72 object-cover"
-              />
 
-              <div className="p-5">
-                <h3 className="text-xl font-semibold text-gray-800">
-                  {item.name}
-                </h3>
+              {/* Image */}
+              <div className="overflow-hidden rounded-t-[28px]">
+                <img
+                  src={getImageUrl(product)}
+                  alt={product.name}
+                  className="h-[350px] w-full object-cover group-hover:scale-105 transition"
+                />
+              </div>
 
-                <p className="text-2xl font-bold text-gray-900 mt-2">
-                  ₹{item.price}
+              {/* Details */}
+              <div className="p-5 space-y-2">
+
+                <p className="text-xs uppercase text-[#8b7355]">
+                  {product.category}
                 </p>
 
-                <button className="w-full mt-4 bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition">
-                  Add to Cart
-                </button>
-                
+                <h4 className="font-semibold">
+                  {product.name}
+                </h4>
+
+                <div className="flex justify-between items-center">
+                  <p className="font-medium">
+                    ₹{product.price}
+                  </p>
+
+                  <button className="p-3 rounded-full border hover:bg-black hover:text-white transition">
+                    <ShoppingBag size={18} />
+                  </button>
+                </div>
+
               </div>
+
             </div>
           ))}
+
         </div>
 
       </div>

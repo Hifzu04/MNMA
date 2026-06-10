@@ -1,8 +1,7 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logoImg from "../assets/register.webp"; // Ensure you have a relevant image in your assets folder
- import MNMALOGO from "../assets/mnma_logo.png";
+import logoImg from "../assets/register.webp";
+import MNMALOGO from "../assets/mnma_logo.png";
 
 export default function SigninPage() {
   const [formData, setFormData] = useState({
@@ -16,40 +15,42 @@ export default function SigninPage() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [e.target.name]: e.target.value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setError("");
-    setLoading(true);
-
     try {
-      const API_URL = "backend URL here";
+      setLoading(true);
+      setError("");
 
-      const response = await fetch(`${API_URL}/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        "http://localhost:5000/api/user/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const data = await response.json();
 
-      if (response.ok) {
-        navigate("/Checkout");
-      } else {
-        setError(data.message || "Login failed");
+      if (!response.ok) {
+        throw new Error(data.message);
       }
-    } catch (err) {
-      setError("Server error. Try again later.");
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/CheckoutPage");
+    } catch (error) {
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -57,88 +58,74 @@ export default function SigninPage() {
 
   return (
     <div className="min-h-screen flex">
-
-      {/* LEFT IMAGE SECTION */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-blue-900 to-gray-900 items-center justify-center">
+      <div className="hidden md:flex w-1/2">
         <img
           src={logoImg}
-          alt="MNMA Sign In"
+          alt="login"
           className="w-full h-full object-cover"
         />
       </div>
 
-      {/* RIGHT SECTION */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center px-5 sm:px-8 md:px-12 lg:px-16 py-8 bg-[#f8f5f0]">
-        <img src={MNMALOGO} alt="MNMA Logo"  className="h-12 w-12 rounded-full object-cover mb-6 mx-auto"/>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-2">
+      <div className="w-full lg:w-1/2 flex flex-col justify-center px-8 bg-[#f8f5f0]">
+        <img
+          src={MNMALOGO}
+          alt="logo"
+          className="h-12 w-12 rounded-full mx-auto mb-4"
+        />
+
+        <h1 className="text-4xl font-bold text-center mb-2">
           Welcome Back
         </h1>
 
-        <p className="text-gray-600 text-center mb-8">
-          Sign in to continue
+        <p className="text-center text-gray-600 mb-8">
+          Login to continue
         </p>
 
         {error && (
-          <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-lg mb-6 text-center">
+          <div className="bg-red-100 text-red-600 p-3 rounded mb-4">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-
-          {/* Email */}
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="email"
             name="email"
-            placeholder="Enter Your Email"
+            placeholder="Email Address"
             value={formData.email}
             onChange={handleChange}
-            className="w-full px-4 py-3 bg-white text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            className="w-full p-3 border rounded-lg"
             required
           />
 
-          {/* Password */}
           <input
             type="password"
             name="password"
-            placeholder="Enter Your Password"
+            placeholder="Password"
             value={formData.password}
             onChange={handleChange}
-            className="w-full px-4 py-3 bg-white text-gray-800 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+            className="w-full p-3 border rounded-lg"
             required
           />
 
-          {/* Forgot Password */}
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => navigate("/ForgotPassword")}
-              className="text-blue-600 hover:underline text-sm"
-            >
-              Forgot Password?
-            </button>
-          </div>
-
-          {/* Sign In Button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-300"
+            className="w-full bg-blue-600 text-white p-3 rounded-lg"
           >
             {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
-        <p className="text-gray-600 text-center mt-6 text-sm">
+        <p className="text-center mt-5">
           Don't have an account?{" "}
           <span
-            onClick={() => navigate("/CheckoutPage")}
-            className="text-blue-600 hover:underline cursor-pointer font-medium"
+            className="text-blue-600 cursor-pointer"
+            onClick={() => navigate("/SignupPage")}
           >
             Register here
           </span>
         </p>
-
       </div>
     </div>
   );

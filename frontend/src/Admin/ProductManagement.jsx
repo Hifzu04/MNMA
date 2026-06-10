@@ -1,141 +1,372 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from "react";
+import api from "../api/api";
 
 export default function ProductManagement() {
   const [products, setProducts] = useState([]);
+
   const [product, setProduct] = useState({
-    name: '',
-    description: '',
-    price: 0,
-    countInStock: 0,
-    sku: '',
-    sizes: '',
-    colors: '',
-    image: null
+    name: "",
+    description: "",
+    price: "",
+    discountprice: "",
+    countinstock: "",
+    category: "",
+    brand: "",
+    collections: "",
+    material: "",
+    gender: "",
+    sku: "",
+    sizes: "",
+    colors: "",
+    tags: "",
+    weight: "",
   });
 
+  // Fetch Products
+  const fetchProducts = async () => {
+    try {
+      const res = await api.get("/products");
+      setProducts(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  // Handle Input Change
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProduct((prev) => ({ ...prev, [name]: value }));
+
+    setProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleImageChange = (e) => {
-    setProduct((prev) => ({ ...prev, image: e.target.files[0] }));
-  };
-
-  const handleSubmit = (e) => {
+  // Add Product
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const newProduct = {
-      ...product,
-      id: Date.now(),
-      price: Number(product.price),
-      countInStock: Number(product.countInStock),
-      sizes: product.sizes.split(',').map(s => s.trim()).filter(Boolean),
-      colors: product.colors.split(',').map(c => c.trim()).filter(Boolean),
-      imagePreview: product.image ? URL.createObjectURL(product.image) : null
-    };
+    try {
+      const token = localStorage.getItem("token");
 
-    setProducts((prev) => [...prev, newProduct]);
-    
-    setProduct({
-      name: '',
-      description: '',
-      price: 0,
-      countInStock: 0,
-      sku: '',
-      sizes: '',
-      colors: '',
-      image: null
-    });
-    e.target.reset();
+      const productData = {
+        name: product.name,
+        description: product.description,
+        price: Number(product.price),
+        discountprice: Number(product.discountprice) || 0,
+        countinstock: Number(product.countinstock),
+        category: product.category,
+        brand: product.brand,
+        collections: product.collections,
+        material: product.material,
+        gender: product.gender,
+        sku: product.sku,
+        weight: Number(product.weight) || 0,
+
+        sizes: product.sizes
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+
+        colors: product.colors
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+
+        tags: product.tags
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean),
+
+        images: [],
+
+        isfeatured: false,
+        ispublised: true,
+      };
+
+      await api.post("/products", productData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      alert("Product Added Successfully");
+
+      setProduct({
+        name: "",
+        description: "",
+        price: "",
+        discountprice: "",
+        countinstock: "",
+        category: "",
+        brand: "",
+        collections: "",
+        material: "",
+        gender: "",
+        sku: "",
+        sizes: "",
+        colors: "",
+        tags: "",
+        weight: "",
+      });
+
+      fetchProducts();
+    } catch (error) {
+      console.log(error);
+      alert("Failed To Add Product");
+    }
+  };
+
+  // Delete Product
+  const handleDelete = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await api.delete(`/products/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      fetchProducts();
+      alert("Product Deleted");
+    } catch (error) {
+      console.log(error);
+      alert("Delete Failed");
+    }
   };
 
   return (
-    <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px', fontFamily: 'sans-serif' }}>
-      <h1 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px' }}>Product Management</h1>
-      
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '40px' }}>
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Product Name</label>
-          <input type="text" name="name" value={product.name} onChange={handleChange} style={inputStyle} required />
-        </div>
+    <div className="max-w-6xl mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6">
+        Product Management
+      </h1>
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Description</label>
-          <textarea name="description" value={product.description} onChange={handleChange} rows="3" style={inputStyle} />
-        </div>
+      {/* Product Form */}
+      <form
+        onSubmit={handleSubmit}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-white p-6 rounded-lg shadow"
+      >
+        <input
+          type="text"
+          name="name"
+          placeholder="Product Name"
+          value={product.name}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
 
-        <div style={{ display: 'flex', gap: '15px' }}>
-          <div style={{ ...fieldStyle, flex: 1 }}>
-            <label style={labelStyle}>Price</label>
-            <input type="number" name="price" value={product.price} onChange={handleChange} style={inputStyle} required />
-          </div>
-          <div style={{ ...fieldStyle, flex: 1 }}>
-            <label style={labelStyle}>Count in Stock</label>
-            <input type="number" name="countInStock" value={product.countInStock} onChange={handleChange} style={inputStyle} required />
-          </div>
-        </div>
+        <input
+          type="text"
+          name="category"
+          placeholder="Category"
+          value={product.category}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>SKU</label>
-          <input type="text" name="sku" value={product.sku} onChange={handleChange} style={inputStyle} />
-        </div>
+        <textarea
+          name="description"
+          placeholder="Description"
+          value={product.description}
+          onChange={handleChange}
+          className="border p-2 rounded md:col-span-2"
+        />
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Sizes (comma-separated)</label>
-          <input type="text" name="sizes" placeholder="S, M, L" value={product.sizes} onChange={handleChange} style={inputStyle} />
-        </div>
+        <input
+          type="number"
+          name="price"
+          placeholder="Price"
+          value={product.price}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Colors (comma-separated)</label>
-          <input type="text" name="colors" placeholder="Black, White" value={product.colors} onChange={handleChange} style={inputStyle} />
-        </div>
+        <input
+          type="number"
+          name="discountprice"
+          placeholder="Discount Price"
+          value={product.discountprice}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
 
-        <div style={fieldStyle}>
-          <label style={labelStyle}>Upload Image</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
+        <input
+          type="number"
+          name="countinstock"
+          placeholder="Stock"
+          value={product.countinstock}
+          onChange={handleChange}
+          className="border p-2 rounded"
+          required
+        />
 
-        <button type="submit" style={btnStyle}>Save Product</button>
+        <input
+          type="text"
+          name="brand"
+          placeholder="Brand"
+          value={product.brand}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="text"
+          name="collections"
+          placeholder="Collection"
+          value={product.collections}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="text"
+          name="material"
+          placeholder="Material"
+          value={product.material}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <select
+          name="gender"
+          value={product.gender}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        >
+          <option value="">Select Gender</option>
+          <option value="Men">Men</option>
+          <option value="Women">Women</option>
+          <option value="Unisex">Unisex</option>
+        </select>
+
+        <input
+          type="text"
+          name="sku"
+          placeholder="SKU"
+          value={product.sku}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="number"
+          name="weight"
+          placeholder="Weight"
+          value={product.weight}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="text"
+          name="sizes"
+          placeholder="S,M,L,XL"
+          value={product.sizes}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="text"
+          name="colors"
+          placeholder="Black,White,Blue"
+          value={product.colors}
+          onChange={handleChange}
+          className="border p-2 rounded"
+        />
+
+        <input
+          type="text"
+          name="tags"
+          placeholder="summer,new,casual"
+          value={product.tags}
+          onChange={handleChange}
+          className="border p-2 rounded md:col-span-2"
+        />
+
+        <button
+          type="submit"
+          className="bg-black text-white py-2 rounded md:col-span-2"
+        >
+          Add Product
+        </button>
       </form>
 
-      <hr style={{ border: '0', borderTop: '1px solid #ccc', margin: '40px 0' }} />
+      {/* Product List */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-semibold mb-4">
+          Products ({products.length})
+        </h2>
 
-      <h2>Product List ({products.length})</h2>
-      {products.length === 0 ? (
-        <p style={{ color: '#666' }}>No products uploaded yet.</p>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-          {products.map((p) => (
-            <div key={p.id} style={cardStyle}>
-              {p.imagePreview && (
-                <img src={p.imagePreview} alt={p.name} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '4px' }} />
-              )}
-              <div style={{ flex: 1 }}>
-                <h3 style={{ margin: '0 0 5px 0' }}>{p.name}</h3>
-                <p style={{ margin: '0 0 5px 0', fontSize: '14px', color: '#555' }}>{p.description}</p>
-                <div style={{ display: 'flex', gap: '15px', fontSize: '13px', color: '#777' }}>
-                  <span><strong>Price:</strong> ${p.price}</span>
-                  <span><strong>Stock:</strong> {p.countInStock}</span>
-                  <span><strong>SKU:</strong> {p.sku || 'N/A'}</span>
-                </div>
-                {(p.sizes.length > 0 || p.colors.length > 0) && (
-                  <div style={{ marginTop: '5px', fontSize: '12px', color: '#888' }}>
-                    {p.sizes.length > 0 && <div><strong>Sizes:</strong> {p.sizes.join(', ')}</div>}
-                    {p.colors.length > 0 && <div><strong>Colors:</strong> {p.colors.join(', ')}</div>}
-                  </div>
-                )}
+        <div className="grid gap-4">
+          {products.map((item) => (
+            <div
+              key={item._id}
+              className="border rounded-lg p-4 shadow bg-white"
+            >
+              <h3 className="text-xl font-bold">
+                {item.name}
+              </h3>
+
+              <p>{item.description}</p>
+
+              <div className="mt-2">
+                <p>
+                  <strong>Category:</strong>{" "}
+                  {item.category}
+                </p>
+
+                <p>
+                  <strong>Brand:</strong>{" "}
+                  {item.brand}
+                </p>
+
+                <p>
+                  <strong>Price:</strong> ₹{item.price}
+                </p>
+
+                <p>
+                  <strong>Stock:</strong>{" "}
+                  {item.countinstock}
+                </p>
+
+                <p>
+                  <strong>SKU:</strong> {item.sku}
+                </p>
+
+                <p>
+                  <strong>Gender:</strong>{" "}
+                  {item.gender}
+                </p>
+
+                <p>
+                  <strong>Sizes:</strong>{" "}
+                  {item.sizes?.join(", ")}
+                </p>
+
+                <p>
+                  <strong>Colors:</strong>{" "}
+                  {item.colors?.join(", ")}
+                </p>
               </div>
+
+              <button
+                onClick={() => handleDelete(item._id)}
+                className="mt-3 bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Delete
+              </button>
             </div>
           ))}
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
-const fieldStyle = { display: 'flex', flexDirection: 'column' };
-const labelStyle = { fontWeight: '600', fontSize: '14px', marginBottom: '4px' };
-const inputStyle = { width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px', boxSizing: 'border-box' };
-const btnStyle = { padding: '10px', backgroundColor: '#000', color: '#fff', border: 'none', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' };
-const cardStyle = { display: 'flex', gap: '15px', padding: '15px', border: '1px solid #ddd', borderRadius: '6px', alignItems: 'center', backgroundColor: '#fafafa' };
