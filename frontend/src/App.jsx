@@ -8,10 +8,12 @@ import { Toaster } from "sonner"
 import About from './Pages/About'
 import MensSection from './Pages/MensSection'
 import WomensSection from './Pages/WomensSection'
-
+import {Provider} from "react-redux"
+import store from './redux/store'
 function App() {
 
   return (
+    <Provider store={store}>
     <BrowserRouter>
       <Toaster position='top-right' />
 
@@ -30,6 +32,7 @@ function App() {
       </Routes>
 
     </BrowserRouter>
+    </Provider>
   )
 }
 
