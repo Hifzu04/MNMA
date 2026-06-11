@@ -148,8 +148,9 @@ function NewArrivals() {
                     ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
                 >
                     {newArrivals.map((product) => (
-                        <div
+                        <Link
                             key={product._id}
+                            to={`/product/${product._id}`}
                             className='min-w-[100%] sm:min-w-[50%] lg:min-w-[30%] relative'
                         >
                             <img
@@ -175,7 +176,7 @@ function NewArrivals() {
                                     </p>
                                 </Link>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             )}

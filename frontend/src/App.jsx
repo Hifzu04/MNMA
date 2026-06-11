@@ -23,6 +23,7 @@ import ShopManagement from "./Admin/ShopManagement";
 
 import ProtectedRoute from "./Components/ProtectedRoute";
 import AdminRoute from "./Components/AdminRoute";
+import ProductDetail from "./Components/Products/ProductDetail";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path="MensSection" element={<MensSection />} />
           <Route path="WomensSection" element={<WomensSection />} />
           <Route path="TopItems" element={<TopItems />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
 
           <Route
             path="profile"

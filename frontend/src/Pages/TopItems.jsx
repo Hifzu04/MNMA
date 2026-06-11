@@ -1,119 +1,121 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag } from "lucide-react";
+import { Link } from "react-router-dom";
+import { fetchBestSellers } from "../redux/slices/productslice";
 
 export default function TopItems() {
-  const [topItems, setTopItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+ 
+
+  const {
+    bestSellers,
+    status,
+    error,
+  } = useSelector((state) => state.product);
 
   useEffect(() => {
-    const fetchBestSellers = async () => {
-      try {
-        setLoading(true);
+    if (status === "idle") {
+      dispatch(fetchBestSellers());
+    }
+  }, [dispatch, status]);
 
-        const { data } = await axios.get(
-          "http://localhost:5000/api/products/best-seller"
-        );
+  // SAFE ARRAY
+  const products = Array.isArray(bestSellers)
+    ? bestSellers
+    : bestSellers?.products || [];
 
-        console.log("API RESPONSE:", data);
+  console.log("bestSellers:", bestSellers);
+  console.log("products:", products);
+  console.log(fetchBestSellers())
 
-        // Always ensure array
-        setTopItems(Array.isArray(data) ? data : [data]);
-
-      } catch (error) {
-        console.error("Error fetching best sellers:", error);
-        setError("Failed to load products");
-        setTopItems([]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBestSellers();
-  }, []);
-
-  // IMAGE HELPER
   const getImageUrl = (product) => {
-    return product.images?.[0]?.url || "https://via.placeholder.com/300";
+    if (!product?.images?.length) {
+      return "https://via.placeholder.com/300";
+    }
+
+    const image = product.images[0];
+
+    if (typeof image === "string") {
+      return image.startsWith("http")
+        ? image
+        : `http://localhost:5000/${image}`;
+    }
+
+    return image.url || "https://via.placeholder.com/300";
   };
 
-  if (loading) {
+  if (status === "loading") {
     return (
-      <div className="text-center py-20 text-gray-500">
+      <div className="py-20 text-center text-gray-500">
         Loading top products...
       </div>
     );
   }
 
-  if (error) {
+  if (status === "failed") {
     return (
-      <div className="text-center py-20 text-red-500">
-        {error}
+      <div className="py-20 text-center text-red-500">
+        {error || "Failed to load products"}
       </div>
     );
   }
 
   return (
-    <section className="py-12 px-6 bg-gray-50">
-      <div className="max-w-7xl mx-auto">
-
-        {/* Heading */}
-        <div className="text-center mb-10">
+    <section className="bg-gray-50 px-6 py-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-10 text-center">
           <h2 className="text-4xl font-bold text-gray-900">
             Top Selling Items
           </h2>
-          <p className="text-gray-600 mt-2">
+          <p className="mt-2 text-gray-600">
             Discover our most popular fashion picks
           </p>
         </div>
 
-        {/* Product Grid */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-
-          {topItems.map((product) => (
-            <div
-              key={product._id}
-              className="group rounded-[28px] bg-white shadow-sm hover:-translate-y-2 transition"
-            >
-
-              {/* Image */}
-              <div className="overflow-hidden rounded-t-[28px]">
-                <img
-                  src={getImageUrl(product)}
-                  alt={product.name}
-                  className="h-[350px] w-full object-cover group-hover:scale-105 transition"
-                />
-              </div>
-
-              {/* Details */}
-              <div className="p-5 space-y-2">
-
-                <p className="text-xs uppercase text-[#8b7355]">
-                  {product.category}
-                </p>
-
-                <h4 className="font-semibold">
-                  {product.name}
-                </h4>
-
-                <div className="flex justify-between items-center">
-                  <p className="font-medium">
-                    ₹{product.price}
-                  </p>
-
-                  <button className="p-3 rounded-full border hover:bg-black hover:text-white transition">
-                    <ShoppingBag size={18} />
-                  </button>
+        {products.length > 0 ? (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            {products.map((product) => (
+              <Link
+                key={product._id}
+                to={`/product/${product._id}`}
+                className="group rounded-[28px] bg-white shadow-sm transition hover:-translate-y-2"
+              >
+                <div className="overflow-hidden rounded-t-[28px]">
+                  <img
+                    src={getImageUrl(product)}
+                    alt={product.name}
+                    className="h-[350px] w-full object-cover transition group-hover:scale-105"
+                  />
                 </div>
 
-              </div>
+                <div className="space-y-2 p-5">
+                  <p className="text-xs uppercase text-[#8b7355]">
+                    {product.category}
+                  </p>
 
-            </div>
-          ))}
+                  <h4 className="font-semibold">
+                    {product.name}
+                  </h4>
 
-        </div>
+                  <div className="flex items-center justify-between">
+                    <p className="font-medium">
+                      ₹{product.price}
+                    </p>
 
+                    <div className="rounded-full border p-3 transition hover:bg-black hover:text-white">
+                      <ShoppingBag size={18} />
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="py-10 text-center text-gray-500">
+            No top-selling products found.
+          </div>
+        )}
       </div>
     </section>
   );

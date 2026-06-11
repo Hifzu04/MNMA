@@ -290,7 +290,16 @@ export default function ProductManagement() {
           onChange={handleChange}
           className="border p-2 rounded md:col-span-2"
         />
+        <input
+          type=""
+          name="tags"
+          placeholder="summer,new,casual"
+          value={product.tags}
+          onChange={handleChange}
+          className="border p-2 rounded md:col-span-2"
+        />
 
+   
         <button
           type="submit"
           className="bg-black text-white py-2 rounded md:col-span-2"
