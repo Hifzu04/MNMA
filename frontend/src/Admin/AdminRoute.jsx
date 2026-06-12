@@ -1,0 +1,18 @@
+import { Navigate } from "react-router-dom";
+
+export default function AdminRoute({ children }) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (!user) {
+    return <Navigate to="/SigninPage" replace />;
+  }
+
+  if (user.role !== "admin") {
+    return <Navigate to="/" replace />;
+  }
+   if (user.role === "admin") {
+    return <Navigate to="/admin/dashboard" replace />;
+  }
+
+  return children;
+}
