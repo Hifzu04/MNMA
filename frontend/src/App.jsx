@@ -3,72 +3,36 @@ import "./App.css";
 
 import UserLayout from "./Components/Layout/UserLayout";
 
-import Home from "./Pages/Home";
-import About from "./Pages/About";
-import MensSection from "./Pages/MensSection";
-import WomensSection from "./Pages/WomensSection";
-import TopItems from "./Pages/TopItems";
-import Profile from "./Pages/Profile";
-import SignupPage from "./Pages/SignupPage";
-import SigninPage from "./Pages/SigninPage";
-import CheckoutPage from "./Pages/CheckoutPage";
-import OrderConfirmationPage from "./Pages/OrderConfirmationPage";
-
-import AdminDashboard from "./Admin/AdminDashboard";
-import AdminPage from "./Admin/AdminPage";
-import UserManagement from "./Admin/UserManagement";
-import ProductManagement from "./Admin/ProductManagement";
-import OrderManagement from "./Admin/OrderManagement";
-import ShopManagement from "./Admin/ShopManagement";
-
-import ProtectedRoute from "./Components/ProtectedRoute";
-import AdminRoute from "./Components/AdminRoute";
-import ProductDetail from "./Components/Products/ProductDetail";
+import UserLayout from './Components/Layout/UserLayout'
+import Home from './Pages/Home'
+import { Toaster } from "sonner"
+import About from './Pages/About'
+import MensSection from './Pages/MensSection'
+import WomensSection from './Pages/WomensSection'
+import {Provider} from "react-redux"
+import store from './redux/store'
+function App() {
 
 function App() {
   return (
+    <Provider store={store}>
     <BrowserRouter>
+      <Toaster position='top-right' />
+
       <Routes>
         {/* User Routes */}
         <Route path="/" element={<UserLayout />}>
           <Route index element={<Home />} />
 
-          <Route path="about" element={<About />} />
-          <Route path="MensSection" element={<MensSection />} />
-          <Route path="WomensSection" element={<WomensSection />} />
-          <Route path="TopItems" element={<TopItems />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path='/' element={<UserLayout />}>
+          <Route index element={<Home />} />
+          <Route path='about' element={<About />} />
+          <Route path='MensSection' element={<MensSection />} />
+          <Route path='WomensSection' element={<WomensSection />} />
 
-          <Route
-            path="profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route path="SignupPage" element={<SignupPage />} />
-          <Route path="SigninPage" element={<SigninPage />} />
-
-          <Route
-            path="CheckoutPage"
-            element={
-              <ProtectedRoute>
-                <CheckoutPage />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="order-confirmation"
-            element={
-              <ProtectedRoute>
-                <OrderConfirmationPage />
-              </ProtectedRoute>
-            }
-          />
         </Route>
+        <Route>{/*admin route*/}</Route>
+
 
         {/* Admin Routes */}
         <Route
@@ -87,7 +51,8 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
-  );
+    </Provider>
+  )
 }
 
 export default App;
