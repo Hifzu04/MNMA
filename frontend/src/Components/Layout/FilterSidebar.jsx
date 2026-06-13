@@ -17,7 +17,7 @@ export default function FilterSidebar({
   const materials = ["Cotton", "Wool", "Denim", "Polyester"];
 
   return (
-    <aside className="w-64 border-r pr-6">
+    <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r pb-6 md:pb-0 md:pr-6">
       <h2 className="mb-6 text-xl font-bold">Filter</h2>
 
       <div className="mb-8">

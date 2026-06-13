@@ -73,10 +73,10 @@ export default function WomensSection() {
   ]);
 
   return (
-    <div className="container mx-auto px-4 py-10">
-      <div className="flex flex-col lg:flex-row gap-8">
+    <div className="container mx-auto px-4 sm:px-6 py-8 sm:py-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
         {/* Sidebar */}
-        <div className="w-full lg:w-72 shrink-0">
+        <div className="w-full lg:w-64 lg:shrink-0">
           <FilterSidebar
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
@@ -92,14 +92,14 @@ export default function WomensSection() {
         </div>
 
         {/* Products Section */}
-        <section className="flex-1 bg-white">
-          <div className="mb-14 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <section className="flex-1 min-w-0">
+          <div className="mb-8 sm:mb-14 flex flex-col gap-4 sm:gap-6 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="mb-3 text-sm font-medium uppercase tracking-[4px] text-[#8b7355]">
+              <p className="mb-2 sm:mb-3 text-xs sm:text-sm font-medium uppercase tracking-[3px] sm:tracking-[4px] text-[#8b7355]">
                 WOMEN COLLECTION
               </p>
 
-              <h2 className="max-w-2xl text-4xl font-semibold leading-tight text-[#1a1a1a] md:text-5xl">
+              <h2 className="max-w-2xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-[#1a1a1a]">
                 Timeless Fashion
                 <span className="block text-[#8b7355]">
                   Crafted For Modern Women
@@ -110,48 +110,44 @@ export default function WomensSection() {
 
           {loading ? (
             <div className="flex justify-center py-20">
-              <p className="text-gray-500 text-lg">
-                Loading Products...
-              </p>
+              <p className="text-gray-500">Loading Products...</p>
             </div>
           ) : products.length === 0 ? (
             <div className="flex justify-center py-20">
-              <p className="text-gray-500 text-lg">
-                No Products Found
-              </p>
+              <p className="text-gray-500">No Products Found</p>
             </div>
           ) : (
-            <div className="grid gap-8 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {products.map((product) => (
                 <Link
                   key={product._id}
                   to={`/product/${product._id}`}
-                  className="group rounded-[28px] bg-white shadow-sm hover:shadow-lg hover:-translate-y-2 transition-all duration-300 cursor-pointer"
+                  className="group rounded-2xl bg-white shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="overflow-hidden rounded-t-[28px]">
+                  <div className="overflow-hidden rounded-t-2xl">
                     <img
                       src={getImageUrl(product)}
                       alt={product.name}
-                      className="h-[350px] w-full object-cover group-hover:scale-105 transition duration-300"
+                      className="h-[260px] sm:h-[300px] lg:h-[320px] w-full object-cover group-hover:scale-105 transition duration-300"
                     />
                   </div>
 
-                  <div className="p-5 space-y-2">
-                    <p className="text-xs uppercase text-[#8b7355]">
+                  <div className="p-4 sm:p-5 space-y-1">
+                    <p className="text-xs uppercase text-[#8b7355] tracking-wider">
                       {product.category}
                     </p>
 
-                    <h4 className="font-semibold text-gray-900">
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base truncate">
                       {product.name}
                     </h4>
 
-                    <div className="flex justify-between items-center">
-                      <p className="font-medium text-lg">
+                    <div className="flex justify-between items-center pt-1">
+                      <p className="font-semibold text-base sm:text-lg">
                         ₹{product.price}
                       </p>
 
-                      <div className="p-3 rounded-full border hover:bg-black hover:text-white transition">
-                        <ShoppingBag size={18} />
+                      <div className="p-2 sm:p-3 rounded-full border hover:bg-black hover:text-white transition">
+                        <ShoppingBag size={16} />
                       </div>
                     </div>
                   </div>

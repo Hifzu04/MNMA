@@ -30,7 +30,7 @@ function NewArrivals() {
     const handleMouseDown = (e) => {
         setIsDragging(true)
         setStartX(e.pageX - scrollRef.current.offsetLeft)
-        setScrollLeft(scrollRef.current.scrollLeft)
+        setInitialScrollLeft(scrollRef.current.scrollLeft)
     }
 
     const handleMouseMove = (e) => {
@@ -44,7 +44,7 @@ function NewArrivals() {
 
     }
 
-    const handlemouseUporleave = (e) => {
+    const handlemouseUporleave = () => {
         setIsDragging(false)
     }
 

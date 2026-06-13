@@ -17,7 +17,7 @@ const initialState = {
     error:null
 }
 
-export const loginuser = createAsyncThunk("auth/loginUser" , async(userData, {rejectedWithValue})=>{
+export const loginuser = createAsyncThunk("auth/loginUser" , async(userData, {rejectWithValue})=>{
     try {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/login/` , userData) // sending userdata coming from 
         // login form 
@@ -26,11 +26,11 @@ export const loginuser = createAsyncThunk("auth/loginUser" , async(userData, {re
         return response.data.user
     } 
     catch (error) {
-        return RejectedWithValue(error.response.data)
+        return rejectWithValue(error.response?.data || error.message)
     }
 })
 
-export const registeruser = createAsyncThunk("auth/loginUser" , async(userData, {rejectedWithValue})=>{
+export const registeruser = createAsyncThunk("auth/registerUser" , async(userData, {rejectWithValue})=>{
     try {
         const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users/register` , userData) // sending userdata coming from 
         // register form 
@@ -39,7 +39,7 @@ export const registeruser = createAsyncThunk("auth/loginUser" , async(userData, 
         return response.data.user
     } 
     catch (error) {
-        return RejectedWithValue(error.response.data)
+        return rejectWithValue(error.response?.data || error.message)
     }
 })
 
