@@ -33,6 +33,7 @@ export default function ProductManagement() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchProducts();
   }, []);
 
@@ -284,14 +285,6 @@ export default function ProductManagement() {
 
         <input
           type="text"
-          name="tags"
-          placeholder="summer,new,casual"
-          value={product.tags}
-          onChange={handleChange}
-          className="border p-2 rounded md:col-span-2"
-        />
-        <input
-          type=""
           name="tags"
           placeholder="summer,new,casual"
           value={product.tags}

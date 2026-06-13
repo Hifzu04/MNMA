@@ -23,7 +23,7 @@ export const createproduct = createAsyncThunk("adminproducts/createproducts" , a
     return response.data
 })
 
-export const updateproduct = createAsyncThunk("adminproducts/updateproducts" , async({id , updateproduct})=>{
+export const updateproduct = createAsyncThunk("adminproducts/updateproducts" , async({id , productdata})=>{
     const response = await axios.put(`${API_URL}/api/admin/products/${id}` ,productdata, {
         headers:{
             Authorization: USER_TOKEN

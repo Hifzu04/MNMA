@@ -21,7 +21,7 @@ function Navbar() {
     }
     return (
         <>
-            <nav className=' container flex  mx-auto  items-center justify-between  px-6 py-4 '>
+            <nav className='relative container flex  mx-auto  items-center justify-between  px-6 py-4 '>
                 <div>
                  <div>
     <Link
@@ -61,13 +61,13 @@ function Navbar() {
           
                 <div className='flex items-center space-x-4'>
                          
-          <button
-         onClick={() => navigate("/admin/dashboard")}
-             className="bg-black text-white px-4   py-2 rounded-lg font-medium shadow-md hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
-        >
-                Admin
-          </button>
-                    <Link to="/profile" className='hover:text-black'>
+                    <button
+                        onClick={() => navigate("/admin/dashboard")}
+                        className="hidden md:block bg-black text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-gray-800 hover:shadow-lg transition-all duration-300"
+                    >
+                        Admin
+                    </button>
+                    <Link to="/profile" className='hidden md:block hover:text-black'>
                         <HiOutlineUser className='h-6 w-6 text-gray-700' />
                     </Link>
 
@@ -77,9 +77,7 @@ function Navbar() {
                         <span className='absolute -top-1   bg-[#ea2e0e] text-white text-xs rounded-full px-2 py-0.5  '>4</span>
 
                     </button>
-                    <div className='overflow-hidden'>
-                        <SearchBar />
-                    </div>
+                    <SearchBar />
 
                     {/* navdrawer for smaller screen  */}
                     <button onClick={toggleNavDrawer} className='md:hidden '>
@@ -91,6 +89,14 @@ function Navbar() {
             </nav>
             <Cartdrawer drawerOpen={drawerOpen} toggleCartDrawer={toggleCartDrawer} />
 
+
+            {/* Backdrop overlay */}
+            {navDrawerOpen && (
+                <div 
+                    className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+                    onClick={toggleNavDrawer}
+                />
+            )}
 
             {/* mobile navigation (smaller screen) */}
             <div className={`fixed top-0 left-0 w-3/4 sm:w-1/2 md:w-1/3 h-full bg-white shadow-lg transform transition-transform duration-300 z-50 
@@ -108,31 +114,52 @@ function Navbar() {
                     <h2 className='text-xl font-semibold mb-4'>Menu</h2>
                     <nav className='space-y-4'>
                         <Link
-                            to="#"
+                            to="/"
                             onClick={toggleNavDrawer}
-                            className='block text-gray-600 hover:text-black'>
+                            className='block text-gray-600 hover:text-black font-medium'>
+                            Home
+                        </Link>
+
+                        <Link
+                            to="/MensSection"
+                            onClick={toggleNavDrawer}
+                            className='block text-gray-600 hover:text-black font-medium'>
                             Men
                         </Link>
 
                         <Link
-                            to="#"
+                            to="/WomensSection"
                             onClick={toggleNavDrawer}
-                            className='block text-gray-600 hover:text-black'>
+                            className='block text-gray-600 hover:text-black font-medium'>
                             Women
                         </Link>
 
                         <Link
-                            to="#"
+                            to="/top-items"
                             onClick={toggleNavDrawer}
-                            className='block text-gray-600 hover:text-black'>
+                            className='block text-gray-600 hover:text-black font-medium'>
                             Top Items
                         </Link>
 
                         <Link
-                            to="#"
+                            to="/about"
                             onClick={toggleNavDrawer}
-                            className='block text-gray-600 hover:text-black'>
+                            className='block text-gray-600 hover:text-black font-medium'>
                             About Us
+                        </Link>
+
+                        <Link
+                            to="/profile"
+                            onClick={toggleNavDrawer}
+                            className='block text-gray-600 hover:text-black font-medium'>
+                            Profile
+                        </Link>
+
+                        <Link
+                            to="/admin/dashboard"
+                            onClick={toggleNavDrawer}
+                            className='block text-gray-600 hover:text-black font-medium'>
+                            Admin
                         </Link>
                     </nav>
                 </div>
