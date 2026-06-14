@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchproductbyfilters } from "../redux/slices/productslice";
+import { useParams } from "react-router-dom";
+
 
 export default function TopItems() {
   const dispatch = useDispatch();

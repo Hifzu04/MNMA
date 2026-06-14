@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag, X, Filter } from "lucide-react";
 import FilterSidebar from "../Components/Layout/FilterSidebar";
 import { fetchproductbyfilters } from "../redux/slices/productslice";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function WomensSection() {
   const dispatch = useDispatch();
@@ -158,10 +160,11 @@ export default function WomensSection() {
           ) : (
             <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {products.map((product) => (
-                <div
-                  key={product._id}
-                  className="group overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                >
+                  <Link
+    to={`/product/${product._id}`}
+    key={product._id}
+    className="group overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg block"
+  >
                   <div className="overflow-hidden">
                     <img
                       src={getImageUrl(product)}
@@ -187,7 +190,7 @@ export default function WomensSection() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

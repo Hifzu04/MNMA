@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag, X, Filter } from "lucide-react";
 import FilterSidebar from "../Components/Layout/FilterSidebar";
 import { fetchproductbyfilters } from "../redux/slices/productslice";
-
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export default function MensSection() {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
-  
+    const { id } = useParams();
   const [showFilters, setShowFilters] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("Men");
@@ -55,13 +56,14 @@ export default function MensSection() {
 
 
   return (
+
     <div className="min-h-screen bg-white">
       {/* Filter Toggle Button - Visible on all screens */}
       <div className="px-4 sm:px-6 py-4 sm:py-5 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
             <p className="mb-2 sm:mb-3 text-xs sm:text-sm font-medium uppercase tracking-[3px] sm:tracking-[4px] text-[#8b7355]">
-              MEN COLLECTIONssdsdfdsfdfvvdfdfd
+              MEN COLLECTION
             </p>
 
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-[#1a1a1a]">
@@ -151,10 +153,11 @@ export default function MensSection() {
           ) : (
             <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {products.map((product) => (
-                <div
-                  key={product._id}
-                  className="group overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
-                >
+                 <Link
+    to={`/product/${product._id}`}
+    key={product._id}
+    className="group overflow-hidden rounded-2xl bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg block"
+  >
                   <div className="overflow-hidden">
                     <img
                       src={getImageUrl(product)}
@@ -180,7 +183,7 @@ export default function MensSection() {
                       </button>
                     </div>
                   </div>
-                </div>
+                </Link  >
               ))}
             </div>
           )}

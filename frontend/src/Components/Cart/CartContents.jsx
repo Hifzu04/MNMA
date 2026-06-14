@@ -1,97 +1,127 @@
-// when backend will be ready Will remove this foldere
-
-
-import React from 'react'
+import React from 'react';
 import { RiDeleteBin3Line } from 'react-icons/ri';
+import { useSelector, useDispatch } from 'react-redux';
+import {
+  removefromcart,
+  updatecartitemquantity,
+  clearcart,
+  fetchcart
+} from '../../redux/slices/cartslice';
 
 function CartContents() {
-    const cartproducts = [
-        {
-            prodId: 1,
-            name: "slipper1",
-            price: 30,
-            size: "M",
-            quantity: 1,
-            color: "green",
-            image: "https://picsum.photos/200?random=1"
-        },
+  const dispatch = useDispatch();
+  
+  // Read data from Redux slice (your slice structure: cart.cart.products)
+  const { cart, loading, error } = useSelector((state) => state.cart);
+  
+  // Access products from the slice
+  const cartproducts = cart?.products || [];
+   
 
-        {
-            prodId: 1,
-            name: "slipper2",
-            price: 3,
-            size: "S",
-            quantity: 1,
-            color: "white",
-            image: "https://picsum.photos/200?random=3"
-        },
+  // Fetch cart on component mount (add your userId and guestId)
+  React.useEffect(() => {
+    const userId = localStorage.getItem("userId"); // Replace with your userId
+    const guestId = localStorage.getItem("guestId"); // Replace with your guestId
+    if (userId || guestId) {
+      dispatch(fetchcart({ userId, guestId }));
+    }
+  }, [dispatch]);
 
+  // Handle increment
+  const handleIncrement = (product) => {
+    dispatch(updatecartitemquantity({
+      productid: product.productid || product._id, 
+      quantity: product.quantity + 1,
+      userId: localStorage.getItem("userId"), // Replace with your userId
+      guestId: localStorage.getItem("guestId"), // Replace with your guestId
+      size: product.size,
+      color: product.color
+    }));
+  };
 
-        {
-            prodId: 1,
-            name: "belt",
-            price: 32,
-            size: "L",
-            quantity: 1,
-            color: "grey",
-            image: "https://picsum.photos/200?random=1"
-        },
+  // Handle decrement
+  const handleDecrement = (product) => {
+    if (product.quantity <= 1) return;
+    
+    dispatch(updatecartitemquantity({
+      productid: product.productid || product._id, 
+      quantity: product.quantity - 1,
+      userId: localStorage.getItem("userId"), // Replace with your userId
+      guestId: localStorage.getItem("guestId"), // Replace with your guestId
+      size: product.size,
+      color: product.color
+    }));
+  };
 
+  // Handle remove
+  const handleRemove = (product) => {
+  dispatch(
+    removefromcart({
+      productid: product.productid || product._id, // FIXED
+      userId: localStorage.getItem("userId"),
+      guestId: localStorage.getItem("guestId"),
+      size: product.size,
+      color: product.color
+    })
+  );
+};
 
+  // Handle clear entire cart
+  const handleClearCart = () => {
+    dispatch(clearcart());
+  };
 
-        {
-            prodId: 1,
-            name: "perfumes",
-            price: 35,
-            size: "M",
-            quantity: 1,
-            color: "olive",
-            image: "https://picsum.photos/200?random=2"
-        },
-
-
-
-
-    ];
-    return (
-
+  return (
+    <div>
+      {cartproducts.length === 0 ? (
+        <p className="text-center text-gray-600 py-8">Your cart is empty</p>
+      ) : (
         <div>
-            {cartproducts.map((product, index) => (
-                <div className="flex items-start justify-between py-4 border-b" key={index}>
-                    <div className="flex items-start">
-                        <img src={product.image} alt={product.name} className='w-20 h-24 object-cover mr-4 rounded'
-                        />
-                        <div>
-
-                            <h3>
-                                {product.name}
-                            </h3>
-                            <p className='text-sm text-gray-600'>
-                                size: {product.size} | color: {product.color}
-                            </p>
-                            <div className="flex items-center mt-2">
-                                <button className='border rounded px-2 py-1 text-xl font-medium'>-</button>
-                                <span className='mx-4'>{product.quantity}</span>
-                                <button className='border rounded px-2 py-1 text-xl font-medium'>+</button>
-                            </div>
-
-                        </div>
-
-
-                    </div>
-                    <div>
-                        <p>${product.price.toLocaleString()}</p>
-                        <button>
-                            <RiDeleteBin3Line className='h-6 w-6 mt-2 text-red-600 ' />
-                        </button>
-                    </div>
+          {cartproducts.map((product, index) => (
+            <div className="flex items-start justify-between py-4 border-b" key={index}>
+              <div className="flex items-start">
+                <img
+                  src={product.image}
+                  alt={product.name}
+                  className="w-20 h-24 object-cover mr-4 rounded"
+                />
+                <div>
+                  <h3>
+                    {product.name}
+                   
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    size: {product.size} | color: {product.color}
+                  </p>
+                  <div className="flex items-center mt-2">
+                    <button
+                      onClick={() => handleDecrement(product)}
+                      className="border rounded px-2 py-1 text-xl font-medium"
+                    >
+                      -
+                    </button>
+                    <span className="mx-4">{product.quantity}</span>
+                    <button
+                      onClick={() => handleIncrement(product)}
+                      className="border rounded px-2 py-1 text-xl font-medium"
+                    >
+                      +
+                    </button>
+                  </div>
                 </div>
-            ))
-
-            }
-
+              </div>
+              <div>
+                <p>${product.price.toLocaleString()}</p>
+                <button onClick={() => handleRemove(product)}>
+                  <RiDeleteBin3Line className="h-6 w-6 mt-2 text-red-600" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-    )
+      )}
+    </div>
+  );
 }
 
-export default CartContents
+export default CartContents;
