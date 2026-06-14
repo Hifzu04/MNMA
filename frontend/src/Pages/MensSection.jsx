@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, X, Filter } from "lucide-react";
 import FilterSidebar from "../Components/Layout/FilterSidebar";
 import { fetchproductbyfilters } from "../redux/slices/productslice";
+
 
 export default function MensSection() {
   const dispatch = useDispatch();
   const { products, loading } = useSelector((state) => state.product);
-
+  
+  const [showFilters, setShowFilters] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("Men");
   const [selectedColor, setSelectedColor] = useState("");
   const [selectedSizes, setSelectedSizes] = useState([]);
   const [selectedMaterial, setSelectedMaterial] = useState("");
 
-  const getImageUrl = (product) => {
-    if (!product.images?.[0]) return "https://via.placeholder.com/300";
 
+  const getImageUrl = (product) => {
     const img = product.images[0];
 
     if (typeof img === "string") {
@@ -32,6 +33,7 @@ export default function MensSection() {
     return "https://via.placeholder.com/300";
   };
 
+
   useEffect(() => {
     dispatch(
       fetchproductbyfilters({
@@ -44,7 +46,6 @@ export default function MensSection() {
       })
     );
   }, [
-    dispatch,
     selectedGender,
     selectedCategory,
     selectedColor,
@@ -52,47 +53,100 @@ export default function MensSection() {
     selectedMaterial,
   ]);
 
+
   return (
-    <div className="flex flex-col gap-6 px-4 sm:px-6 py-8 sm:py-10 md:flex-row md:px-6 lg:px-8">
-      <div className="w-full md:w-64 lg:w-72 md:shrink-0">
-        <FilterSidebar
-          selectedCategory={selectedCategory}
-          setSelectedCategory={setSelectedCategory}
-          selectedGender={selectedGender}
-          setSelectedGender={setSelectedGender}
-          selectedColor={selectedColor}
-          setSelectedColor={setSelectedColor}
-          selectedSizes={selectedSizes}
-          setSelectedSizes={setSelectedSizes}
-          selectedMaterial={selectedMaterial}
-          setSelectedMaterial={setSelectedMaterial}
-        />
-      </div>
+    <div className="min-h-screen bg-white">
+      {/* Filter Toggle Button - Visible on all screens */}
+      <div className="px-4 sm:px-6 py-4 sm:py-5 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div>
+            <p className="mb-2 sm:mb-3 text-xs sm:text-sm font-medium uppercase tracking-[3px] sm:tracking-[4px] text-[#8b7355]">
+              MEN COLLECTIONssdsdfdsfdfvvdfdfd
+            </p>
 
-      <section className="w-full flex-1 min-w-0 py-4 md:py-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-8 sm:mb-10 flex flex-col gap-4 sm:gap-6 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="mb-2 sm:mb-3 text-xs sm:text-sm font-medium uppercase tracking-[3px] sm:tracking-[4px] text-[#8b7355]">
-                MEN COLLECTION
-              </p>
-
-              <h2 className="max-w-2xl text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-[#1a1a1a]">
-                Timeless Fashion
-                <span className="block text-[#8b7355]">
-                  Crafted For Modern Men
-                </span>
-              </h2>
-            </div>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold leading-tight text-[#1a1a1a]">
+              Timeless Fashion
+              <span className="block text-[#8b7355]">
+                Crafted For Modern Men
+              </span>
+            </h2>
           </div>
 
+          <button
+            onClick={() => setShowFilters(true)}
+            className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-3 bg-white border-2 border-[#8b7355] rounded-full text-[#8b7355] font-semibold hover:bg-[#8b7355] hover:text-white transition duration-300 shadow-sm hover:shadow-md"
+          >
+            <Filter size={12} className="sm:size-12" />
+            <span className="text-sm sm:text-base">Filters</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Filter Modal - Overlay */}
+      {showFilters && (
+        <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
+          <div 
+            className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
+            onClick={() => setShowFilters(false)}
+          />
+
+          {/* Modal Content */}
+          <div className="absolute inset-y-0 right-0 max-w-md w-full flex">
+            <div className="w-full h-full bg-white shadow-xl flex flex-col">
+              {/* Header */}
+              <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
+                <h3 className="text-sm sm:text-xl font-semibold text-[#1a1a1a]">
+                  Filter Products
+                </h3>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="p-2 sm:p-2 rounded-full hover:bg-gray-100 transition duration-200"
+                >
+                  <X size={24} className="text-[#1a1a1a]" />
+                </button>
+              </div>
+
+              {/* Filter Sidebar Content */}
+              <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-5">
+                <FilterSidebar
+                  selectedCategory={selectedCategory}
+                  setSelectedCategory={setSelectedCategory}
+                  selectedGender={selectedGender}
+                  setSelectedGender={setSelectedGender}
+                  selectedColor={selectedColor}
+                  setSelectedColor={setSelectedColor}
+                  selectedSizes={selectedSizes}
+                  setSelectedSizes={setSelectedSizes}
+                  selectedMaterial={selectedMaterial}
+                  setSelectedMaterial={setSelectedMaterial}
+                />
+              </div>
+
+              {/* Apply Button */}
+              <div className="px-4 sm:px-6 py-4 sm:py-5 border-t border-gray-200">
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="w-full px-4 sm:px-5 py-3 sm:py-4 bg-[#8b7355] text-white font-semibold rounded-full hover:bg-[#7a6345] transition duration-300 shadow-md hover:shadow-lg"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Products Section */}
+      <section className="px-4 sm:px-6 py-6 sm:py-8 md:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           {loading ? (
             <div className="flex justify-center py-20">
-              <p className="text-gray-500">Loading Products...</p>
+              <p className="text-gray-500 text-sm sm:text-base">Loading Products...</p>
             </div>
           ) : products.length === 0 ? (
             <div className="flex justify-center py-20">
-              <p className="text-gray-500">No Products Found</p>
+              <p className="text-gray-500 text-sm sm:text-base">No Products Found</p>
             </div>
           ) : (
             <div className="grid gap-5 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
