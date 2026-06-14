@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag, X, Filter } from "lucide-react";
-import axios from "axios";
-import { Link } from "react-router-dom";
 import FilterSidebar from "../Components/Layout/FilterSidebar";
+import { fetchproductbyfilters } from "../redux/slices/productslice";
 
 export default function WomensSection() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showFilters, setShowFilters] = useState(false);
-
+  const dispatch = useDispatch();
+  const { products, loading } = useSelector((state) => state.product);
+  
+  const [showFilters, setShowFilters] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedGender, setSelectedGender] = useState("Women");
   const [selectedColor, setSelectedColor] = useState("");
@@ -37,41 +37,23 @@ export default function WomensSection() {
     return "https://via.placeholder.com/300";
   };
 
-  const fetchWomenProducts = async () => {
-    try {
-      setLoading(true);
-
-      const { data } = await axios.get(
-        "http://localhost:5000/api/products",
-        {
-          params: {
-            gender: selectedGender,
-            category: selectedCategory,
-            color: selectedColor,
-            material: selectedMaterial,
-            sizes: selectedSizes.length > 0 ? selectedSizes.join(",") : undefined,
-            limit: 40,
-          },
-        }
-      );
-
-      setProducts(Array.isArray(data) ? data : []);
-    } catch (error) {
-      console.error("Error fetching women products:", error);
-      setProducts([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchWomenProducts();
+    dispatch(
+      fetchproductbyfilters({
+        gender: selectedGender,
+        category: selectedCategory,
+        color: selectedColor,
+        size: selectedSizes.join(","),
+        material: selectedMaterial,
+        limit: 40,
+      })
+    );
   }, [
-    selectedCategory,
     selectedGender,
+    selectedCategory,
     selectedColor,
+    selectedSizes,
     selectedMaterial,
-    selectedSizes, // Added missing dependency
   ]);
 
   const handleApplyFilters = () => {
@@ -81,7 +63,7 @@ export default function WomensSection() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Filter Toggle Button */}
+      {/* Filter Toggle Button - Visible on all screens */}
       <div className="px-4 sm:px-6 py-4 sm:py-5 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div>
@@ -107,16 +89,19 @@ export default function WomensSection() {
         </div>
       </div>
 
-      {/* Filter Modal */}
+      {/* Filter Modal - Overlay */}
       {showFilters && (
         <div className="fixed inset-0 z-50 overflow-hidden">
+          {/* Backdrop */}
           <div 
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity"
             onClick={() => setShowFilters(false)}
           />
 
+          {/* Modal Content */}
           <div className="absolute inset-y-0 right-0 max-w-md w-full flex">
             <div className="w-full h-full bg-white shadow-xl flex flex-col">
+              {/* Header */}
               <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-200">
                 <h3 className="text-sm sm:text-xl font-semibold text-[#1a1a1a]">
                   Filter Products
@@ -129,6 +114,7 @@ export default function WomensSection() {
                 </button>
               </div>
 
+              {/* Filter Sidebar Content */}
               <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-5">
                 <FilterSidebar
                   selectedCategory={selectedCategory}
@@ -144,6 +130,7 @@ export default function WomensSection() {
                 />
               </div>
 
+              {/* Apply Button */}
               <div className="px-4 sm:px-6 py-4 sm:py-5 border-t border-gray-200">
                 <button
                   onClick={handleApplyFilters}
