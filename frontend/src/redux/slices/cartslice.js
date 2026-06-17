@@ -67,6 +67,7 @@ export const fetchcart = createAsyncThunk("cart/fetchcart" , async({userId , gue
   "cart/removefromcart",
   async ({ productid, userId, guestId, size, color }, { rejectWithValue }) => {
     try {
+         console.log("Request Body:", { productid, userId, guestId, size, color });
       const response = await axios.delete(
         `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
         {

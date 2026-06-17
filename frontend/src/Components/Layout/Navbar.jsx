@@ -7,11 +7,14 @@ import { useState } from 'react'
 import { IoMdClose } from 'react-icons/io'
 import logo from "../../assets/mnma_logo.png";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 function Navbar() {
     const navigate = useNavigate();
     const [drawerOpen, setDrawerOpen] = useState(false)
     const [navDrawerOpen, setNavDrawerOpen] = useState(false);
+    const  {cart} = useSelector((state)=>state.cart); 
+    const cartItemCount = cart?.products?.reduce((total, product) => total + product   .quantity, 0) || 0; 
     const toggleCartDrawer = () => {
         setDrawerOpen(!drawerOpen);
     }
@@ -74,8 +77,9 @@ function Navbar() {
                     {/* cart */}
                     <button onClick={toggleCartDrawer} className='relative hover:text-black'>
                         <HiOutlineShoppingBag className='h-6 w-6 text-gray-700' />
-                        <span className='absolute -top-1   bg-[#ea2e0e] text-white text-xs rounded-full px-2 py-0.5  '>4</span>
-
+                        {cartItemCount > 0 && (
+                            <span className='absolute -top-1   bg-[#ea2e0e] text-white text-xs rounded-full px-2 py-0.5  '>{cartItemCount}</span>
+                        )} 
                     </button>
                     <SearchBar />
 

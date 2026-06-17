@@ -28,7 +28,10 @@ const Cartdrawer = ({ drawerOpen, toggleCartDrawer }) => {
             {/* checkout buttton fixed at the bottom */}
             <div className='p-4 bg-white sticky bottom-0'>
                
-               <Link to={user ? "/CheckoutPage" : "/SigninPage"}>
+               <Link to={user ? "/CheckoutPage" : "/SigninPage"}
+                 onClick={toggleCartDrawer}
+                 >
+                
     <button className="w-full bg-black text-white py-3 rounded-lg font-semibold hover:bg-gray-800 transition">
       Checkout
     </button>

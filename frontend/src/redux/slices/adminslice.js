@@ -7,7 +7,7 @@ import axios from "axios"
 const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/users` , 
     {
 headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("userToken") || localStorage.getItem("userToken")}`
             }
     }
 )
@@ -25,7 +25,7 @@ headers:{
          ,
            {
   headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("token") || localStorage.getItem("userToken")}`
             }
            }
         )
@@ -44,7 +44,7 @@ headers:{
          ,
            {
   headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("token") || localStorage.getItem("userToken")}`
             }
            }
         )
@@ -58,7 +58,7 @@ headers:{
       `${import.meta.env.VITE_BACKEND_URL}/api/admin/users/${id}`,
       {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem("userToken")}`,
+          Authorization: `Bearer ${localStorage.getItem("token") || localStorage.getItem("userToken")}`,
         },
       }
     );
@@ -93,7 +93,7 @@ headers:{
 
 
               .addCase(updateuser.fulfilled , (state , action)=>{
-              const updateduser = action.payload
+              const updateduser = action.payload.user
               const userindex  = state.users.findIndex((user)=>user._id ===updateduser._id)
               if(userindex !==-1){
                 state.users[userindex] = updateduser
@@ -116,7 +116,7 @@ headers:{
     
                   .addCase(adduser.fulfilled , (state , action)=>{
             state.loading = false 
-            state.users.push(action.payload.user)
+            state.users.push(action.payload.specificadmin)
                  
             })
                  .addCase(adduser.rejected , (state , action)=>{
