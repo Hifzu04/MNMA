@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
 import { fetchproductbyfilters } from "../redux/slices/productslice";
+import { useParams } from "react-router-dom";
+
 
 export default function TopItems() {
   const dispatch = useDispatch();
@@ -14,7 +16,7 @@ export default function TopItems() {
   } = useSelector((state) => state.product);
 
   useEffect(() => {
-    dispatch(fetchproductbyfilters({ sortby: "popular", limit: 8 }));
+    dispatch(fetchproductbyfilters({ sortby: "popularity", limit: 8 }));
   }, [dispatch]);
 
   const getImageUrl = (product) => {
@@ -30,7 +32,13 @@ export default function TopItems() {
         : `http://localhost:5000/${image}`;
     }
 
-    return image.url || "https://via.placeholder.com/300";
+    if (typeof image === "object" && image.url) {
+      return image.url.startsWith("http")
+        ? image.url
+        : `http://localhost:5000/${image.url}`;
+    }
+
+    return "https://via.placeholder.com/300";
   };
 
   if (loading) {

@@ -28,7 +28,28 @@ export const fetchproductdetails = createAsyncThunk("products/fetchproductsdetai
     const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/products/${id}`)
     return response.data
 })
+   // fetch best sellers products
+// export const fetchBestSellers = createAsyncThunk(
+//   "products/fetchBestSellers",
+//   async (_, { rejectWithValue }) => {
+//     try {
+//       const response = await axios.get(
+// //         `${import.meta.env.VITE_BACKEND_URL}/api/products/best-seller`
+        
+// //       );
 
+//       console.log("Best Sellers Response:", response.data);
+
+//       return response.data;
+//     } catch (error) {
+//       return rejectWithValue(
+//         error.response?.data || {
+//           message: "Failed to fetch best sellers",
+//         }
+//       );
+//     }
+//   }
+// );
 
 
 

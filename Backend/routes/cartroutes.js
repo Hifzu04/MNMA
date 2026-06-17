@@ -201,7 +201,7 @@ cartroute.put("/", async (req, res) => {
 // Body: { productid, size, color, guestId? }
 // ─────────────────────────────────────────────
 cartroute.delete("/", async (req, res) => {
-    const { userId, productid, size, color, guestId } = req.body;
+    const { productid, size, color, guestId } = req.body;
 
 
     if (!productid) {
@@ -216,7 +216,7 @@ cartroute.delete("/", async (req, res) => {
         existingCart.products = existingCart.products.filter(  // keep all product except the one we want to delete 
             (p) =>
                 !(
-                    p.productid.toString() === productid.toString() &&
+                    String(p.productid) === String(productid) &&
                     p.size === size &&
                     p.color === color
                 )

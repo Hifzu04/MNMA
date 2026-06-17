@@ -63,22 +63,23 @@ export const fetchcart = createAsyncThunk("cart/fetchcart" , async({userId , gue
 
     // remove an item from cart 
 
-     export const removefromcart = createAsyncThunk("cart/removefromcart" , async({ productid , quantity,  userId , guestId , size , color} , 
-    {rejectWithValue}
-)=>{
-        try {
-           const response =  await axios({
-            method:"DELETE" ,
-            url:`${import.meta.env.VITE_BACKEND_URL}/api/cart`,
-            data:{productid , quantity,  userId , guestId , size , color}
-           })
-        return   response.data
-        } 
-        catch (error) {
-            console.error(error)
-            return  rejectWithValue(error.response.data)
+    export const removefromcart = createAsyncThunk(
+  "cart/removefromcart",
+  async ({ productid, userId, guestId, size, color }, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_BACKEND_URL}/api/cart`,
+        {
+          data: { productid, userId, guestId, size, color }
         }
-    })
+      );
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
 
         export const mergecart = createAsyncThunk("cart/mergecart" , async({ 
         guestId , user              // VIDEO - USER ,,, BUT CHECK WHAT IS COMING USER OR USERID FROM BACKEND
