@@ -1,6 +1,8 @@
 import React from "react";
-
+import { toast } from "sonner";
+ import { useNavigate } from "react-router-dom";
 export default function Profile() {
+   const navigate = useNavigate();
   const user = {
      // this info will come from backend in real application, hardcoded for now
     name: "Faizur Rahman Khan",
@@ -158,9 +160,26 @@ export default function Profile() {
 
             {/* Logout */}
             <div className="flex justify-end">
-              <button className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition">
-                Logout
-              </button>
+              <button
+  onClick={() => {
+    const confirmLogout = window.confirm(
+      "Are you sure you want to logout?"
+    );
+
+    if (confirmLogout) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      toast.success("Logged out successfully!");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+    }
+  }}
+  className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition"
+>
+  Logout
+</button>
             </div>
           </div>
         </div>

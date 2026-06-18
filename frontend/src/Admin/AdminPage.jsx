@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../assets/mnma_logo.png";
+import { toast } from "sonner";
 import {
   Users,
   Package,
@@ -81,12 +82,24 @@ export default function AdminPage() {
         {/* Logout */}
         <div className="p-4">
           <button
-            onClick={() => navigate("/")}
-            className="w-full bg-red-500 hover:bg-red-600 py-3 rounded-md flex items-center justify-center gap-2"
-          >
-            <LogOut size={18} />
-            Logout
-          </button>
+  onClick={() => {
+     const confirmLogout = window.confirm(
+         "Are you sure you want to logout?"
+     );
+      if(confirmLogout){
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+      toast.success("Logged out successfully!");
+          setTimeout(() => {
+        navigate("/");
+      }, 1000);
+  }}
+}
+  className="w-full bg-red-500 hover:bg-red-600 py-3 rounded-md flex items-center justify-center gap-2"
+>
+  <LogOut size={18} />
+  Logout
+</button>
         </div>
       </div>
 
