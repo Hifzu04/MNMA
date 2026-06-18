@@ -10,14 +10,21 @@ export default function TopItems() {
   const dispatch = useDispatch();
 
   const {
-    products: bestSellers,
-    loading,
-    error,
-  } = useSelector((state) => state.product);
+  products: bestSellers,
+  loading,
+  error,
+  filters,
+} = useSelector((state) => state.product);
 
-  useEffect(() => {
-    dispatch(fetchproductbyfilters({ sortby: "popularity", limit: 8 }));
-  }, [dispatch]);
+ useEffect(() => {
+  dispatch(
+    fetchproductbyfilters({
+      sortby: filters.search ? "" : "popularity",
+      search: filters.search,
+      limit: filters.search ? 100 : 8,
+    })
+  );
+}, [dispatch, filters.search]);
 
   const getImageUrl = (product) => {
     if (!product?.images?.length) {

@@ -8,7 +8,9 @@ import { useParams } from "react-router-dom";
 
 export default function WomensSection() {
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.product);
+ const { products, loading, filters } = useSelector(
+   (state) => state.product
+ );
   
   const [showFilters, setShowFilters] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -40,23 +42,26 @@ export default function WomensSection() {
   };
 
   useEffect(() => {
-    dispatch(
-      fetchproductbyfilters({
-        gender: selectedGender,
-        category: selectedCategory,
-        color: selectedColor,
-        size: selectedSizes.join(","),
-        material: selectedMaterial,
-        limit: 40,
-      })
-    );
-  }, [
-    selectedGender,
-    selectedCategory,
-    selectedColor,
-    selectedSizes,
-    selectedMaterial,
-  ]);
+   dispatch(
+     fetchproductbyfilters({
+       gender: selectedGender,
+       category: selectedCategory,
+       color: selectedColor,
+       size: selectedSizes.join(","),
+       material: selectedMaterial,
+       search: filters.search,
+       limit: 40,
+     })
+   );
+ }, [
+   dispatch,
+   selectedGender,
+   selectedCategory,
+   selectedColor,
+   selectedSizes,
+   selectedMaterial,
+   filters.search,
+ ]);
 
   const handleApplyFilters = () => {
     setShowFilters(false);
