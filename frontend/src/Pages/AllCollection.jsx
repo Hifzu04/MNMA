@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 export default function AllCollection() {
   const dispatch = useDispatch();
-  const { products, loading, error } = useSelector((state) => state.product);
+  const { products, loading, error, filters } = useSelector((state) => state.product);
 
   const [showFilters, setShowFilters] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -35,31 +35,33 @@ export default function AllCollection() {
     return "https://via.placeholder.com/300";
   };
 
-  // Fetch products whenever filters change
+
   useEffect(() => {
-    dispatch(
-      fetchproductbyfilters({
-        collection: "",
-        size: selectedSizes.join(","),
-        color: selectedColor,
-        gender: selectedGender, // empty = all genders
-        minprice: "",
-        maxprice: "",
-        sortby: "",
-        search: "",
-        category: selectedCategory,
-        material: selectedMaterial,
-        brand: "",
-        limit: 40,
-      })
-    );
+   dispatch(
+  fetchproductbyfilters({
+    collection: "",
+    size: selectedSizes.join(","),
+    color: selectedColor,
+    gender: selectedGender,
+    minprice: "",
+    maxprice: "",
+    sortby: "",
+    search: filters.search,
+    category: selectedCategory,
+    material: selectedMaterial,
+    brand: "",
+    limit: 100,
+  })
+);
   }, [
+    dispatch,
     selectedCategory,
     selectedGender,
     selectedColor,
     selectedSizes,
     selectedMaterial,
-    dispatch,
+    filters.search,
+  
   ]);
 
   // Header section (same as MensSection)
