@@ -42,16 +42,16 @@ adminprorouter.post("/", protect, admin, async (req, res) => {
             dimensions,
             weight: Number(weight) || 0,
             sku,
-            user: req.user._id  // ✅ This comes from protect middleware
+            user: req.user._id  //  This comes from protect middleware
         })
 
-        console.log("Creating product:", creatingproduct)  // ✅ Debug log
+        console.log("Creating product:", creatingproduct)  
 
         const newproduct = await creatingproduct.save()
         res.status(201).json(newproduct)
     } catch (error) {
-        console.error("POST error:", error)  // ✅ Full error log
-        res.status(500).json({ message: error.message })  // ✅ Return error message
+        console.error("POST error:", error)  
+        res.status(500).json({ message: error.message })  
     }
 })
 
