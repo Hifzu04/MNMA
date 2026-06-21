@@ -15,7 +15,6 @@ export const fetchadminproduct = createAsyncThunk(
         headers: getAuthHeader(),
       });
       return response.data;
-       console.log(response);
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
     }

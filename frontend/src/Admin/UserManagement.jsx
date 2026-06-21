@@ -5,7 +5,7 @@ import { fetchusers, adduser, updateuser, deleteuser } from "../redux/slices/adm
 
 export default function UserManagement() {
   const dispatch = useDispatch();
-  const { users, loading, error } = useSelector((state) => state.admin);
+  const { users = [], loading, error } = useSelector((state) => state.admin);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -99,8 +99,14 @@ export default function UserManagement() {
       <div className="max-w-6xl mx-auto">
         
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-            {error}
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 flex items-center justify-between">
+            <span>⚠️ {error}</span>
+            <button
+              onClick={() => dispatch(fetchusers())}
+              className="ml-4 bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm"
+            >
+              Retry
+            </button>
           </div>
         )}
 

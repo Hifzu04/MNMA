@@ -3,9 +3,9 @@ import user from "../models/user.js"
 import { protect, admin } from "../middleware/authmiddleware.js"
 const adminrouter = express.Router()
 
-adminrouter.get("/" , protect , admin , async(req , res)=>{   // getting  all (only admin )
+adminrouter.get("/" , protect , admin , async(req , res)=>{   // getting all users (admin only)
     try {
-        const gettinguser  = await user.find({role:"admin"})
+       const gettinguser = await user.find({}).select("-password");
         res.json(gettinguser)
     } catch (error) {
         console.error(error)

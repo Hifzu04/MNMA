@@ -35,7 +35,7 @@ const EMPTY_FORM = {
 export default function ProductManagement() {
   const dispatch = useDispatch();
 
-  // ✅ selector key matches slice name "adminproduct"
+  
   const { products = [], loading = false, error = null } = useSelector(
     (state) => state.adminproduct || {}
   );
@@ -194,7 +194,7 @@ export default function ProductManagement() {
     }
   };
 
-  // ─── Render ──────────────────────────────────────────────────
+
 
   return (
     <div className="max-w-6xl mx-auto p-6">
