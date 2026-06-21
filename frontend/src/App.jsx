@@ -66,14 +66,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="profile" element={<Profile />} />
           </Route>
 
           {/* Admin Routes */}
