@@ -1,51 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchallorders,
+  updateorderstatus,
+  deleteorder,
+} from "../redux/slices/adminorderslice";
 
 export default function OrderManagement() {
-  const [orders, setOrders] = useState([
-    {
-      id: "#67540ced3376121b361a0ed0",
-      customer: "Admin User",
-      totalPrice: 199.96,
-      status: "Processing",
-    },
-    {
-      id: "#67540d3ca67b4a70e434e092",
-      customer: "Ali Khan",
-      totalPrice: 40,
-      status: "Processing",
-    },
-    {
-      id: "#675bf2c6ca77bd83eefd7a18",
-      customer: "Sara Ahmed",
-      totalPrice: 39.99,
-      status: "Shipped",
-    },
-    {
-      id: "#675c24b09b88827304bd5cc1",
-      customer: "John Doe",
-      totalPrice: 59.99,
-      status: "Delivered",
-    },
-  ]);
+  const dispatch = useDispatch();
 
-  const handleStatusChange = (id, newStatus) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id
-          ? { ...order, status: newStatus }
-          : order
-      )
-    );
+  const { orders = [], loading, error } = useSelector(
+    (state) => state.adminorders || {}
+  );
+
+  useEffect(() => {
+    dispatch(fetchallorders());
+  }, [dispatch]);
+
+  const handleStatusChange = (id, status) => {
+    dispatch(updateorderstatus({ id, status }));
   };
 
-  const markAsDelivered = (id) => {
-    setOrders(
-      orders.map((order) =>
-        order.id === id
-          ? { ...order, status: "Delivered" }
-          : order
-      )
-    );
+  const handleDelete = (id) => {
+    if (window.confirm("Delete this order?")) {
+      dispatch(deleteorder(id));
+    }
   };
 
   const getStatusColor = (status) => {
@@ -64,12 +43,12 @@ export default function OrderManagement() {
   return (
     <div className="p-8 min-h-screen bg-gray-100">
       <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-        
         <div className="p-6 border-b">
-          <h1 className="text-3xl font-bold text-gray-800">
-            Order Management
-          </h1>
+          <h1 className="text-3xl font-bold text-gray-800">Order Management</h1>
         </div>
+
+        {error && <div className="p-4 text-red-600">{error}</div>}
+        {loading && <div className="p-4">Loading orders...</div>}
 
         <div className="overflow-x-auto">
           <table className="w-full">
@@ -85,67 +64,39 @@ export default function OrderManagement() {
 
             <tbody>
               {orders.map((order) => (
-                <tr
-                  key={order.id}
-                  className="border-t hover:bg-gray-50"
-                >
-                  <td className="p-4 font-medium">
-                    {order.id}
-                  </td>
-
-                  <td className="p-4">
-                    {order.customer}
-                  </td>
-
+                <tr key={order._id} className="border-t hover:bg-gray-50">
+                  <td className="p-4 font-medium">{order._id}</td>
+                  <td className="p-4">{order.user?.name || "Unknown"}</td>
                   <td className="p-4 font-semibold">
-                    ${order.totalPrice}
+                    ${order.totalprice || order.totalPrice || 0}
                   </td>
-
                   <td className="p-4">
                     <select
-                      value={order.status}
-                      onChange={(e) =>
-                        handleStatusChange(
-                          order.id,
-                          e.target.value
-                        )
-                      }
+                   value={order.status || "Processing"}
+                      onChange={(e) => handleStatusChange(order._id, e.target.value)}
                       className={`border rounded-lg px-3 py-2 ${getStatusColor(
                         order.status
                       )}`}
                     >
-                      <option value="Processing">
-                        Processing
-                      </option>
-                      <option value="Shipped">
-                        Shipped
-                      </option>
-                      <option value="Delivered">
-                        Delivered
-                      </option>
-                      <option value="Cancelled">
-                        Cancelled
-                      </option>
+                      <option value="Processing">Processing</option>
+                      <option value="Shipped">Shipped</option>
+                      <option value="Delivered">Delivered</option>
+                      <option value="Cancelled">Cancelled</option>
                     </select>
                   </td>
-
                   <td className="p-4 text-center">
                     <button
-                      onClick={() =>
-                        markAsDelivered(order.id)
-                      }
-                      className="bg-green-500 hover:bg-green-600 text-white px-5 py-2 rounded-lg transition"
+                      onClick={() => handleDelete(order._id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-lg transition"
                     >
-                      Mark as Delivered
+                      Delete
                     </button>
                   </td>
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
-
       </div>
     </div>
   );

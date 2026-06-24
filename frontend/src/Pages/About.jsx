@@ -64,13 +64,13 @@ const About = () => {
 
           <div className="mt-10 flex justify-center gap-5 flex-wrap">
          <Link
-          to="/"
+          to="/collection"
       className="px-8 py-4 bg-orange-500 hover:bg-orange-600 transition text-white rounded-full text-lg font-semibold shadow-lg inline-block"
      >
   Shop Now
 </Link>
 
-            <Link to='/'  className="px-8 py-4 border border-gray-300 hover:border-orange-500 hover:text-orange-500 transition rounded-full text-lg font-medium">
+            <Link to='/collection'  className="px-8 py-4 border border-gray-300 hover:border-orange-500 hover:text-orange-500 transition rounded-full text-lg font-medium">
               Explore Collection
             </Link>
           </div>
@@ -203,10 +203,11 @@ const About = () => {
             Experience premium products, trusted quality and a seamless
             online shopping journey designed for modern customers.
           </p>
-
-          <button className="mt-10 px-10 py-4 bg-white text-orange-500 rounded-full text-lg font-semibold hover:scale-105 transition shadow-xl">
-            Start Shopping
-          </button>
+           <Link to="/collection">
+  <button className="mt-10 px-10 py-4 bg-white text-orange-500 rounded-full text-lg font-semibold hover:scale-105 transition shadow-xl">
+    Start Shopping
+  </button>
+</Link>  
         </motion.div>
       </section>
     </div>

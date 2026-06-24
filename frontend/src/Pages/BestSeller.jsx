@@ -269,8 +269,7 @@ function BestSeller() {
 
             {/* Quantity */}
             <div className="mb-6">
-              <h3 className="font-medium mb-2">Quantity</h3>
-
+           
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => handleQuantityChange("Minus")}
@@ -292,38 +291,8 @@ function BestSeller() {
               </div>
             </div>
 
-            {/* Product Info */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-
-              <div className="border rounded-lg p-3">
-                <p className="text-sm text-gray-500">Brand</p>
-                <p className="font-medium">
-                  {product.brand || "N/A"}
-                </p>
-              </div>
-
-              <div className="border rounded-lg p-3">
-                <p className="text-sm text-gray-500">Stock</p>
-                <p className="font-medium">
-                  {product.stock || 0}
-                </p>
-              </div>
-
-              <div className="border rounded-lg p-3">
-                <p className="text-sm text-gray-500">Category</p>
-                <p className="font-medium">
-                  {product.category || "N/A"}
-                </p>
-              </div>
-
-              <div className="border rounded-lg p-3">
-                <p className="text-sm text-gray-500">SKU</p>
-                <p className="font-medium">
-                  {product.sku || "N/A"}
-                </p>
-              </div>
-
-            </div>
+          
+         
 
             {/* Add To Cart */}
             <button
