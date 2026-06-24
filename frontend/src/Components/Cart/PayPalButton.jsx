@@ -8,12 +8,18 @@ const PayPalButton = ({ amount, onSuccess, onError }) => {
   return (
     <PayPalScriptProvider
       options={{
-        "client-id":
-          "YOUR_PAYPAL_CLIENT_ID",
+        "client-id": import.meta.env.VITE_PAYPAL_CLIENT_ID,
+         currency: "USD",
       }}
     >
       <PayPalButtons
-        style={{ layout: "vertical" }}
+        style={{
+          layout: "vertical",
+          color: "gold",
+          shape: "pill",
+          label: "paypal",
+          height: 50,
+        }}
         createOrder={(data, actions) => {
           return actions.order.create({
             purchase_units: [
