@@ -68,6 +68,9 @@ cartroute.post("/", async (req, res) => {   // customer adding a product to card
 
         // Check if same product + size + color already in cart
         if (existingCart) {
+            if (userId && !existingCart.user) {
+                existingCart.user = userId;
+            }
             const itemIndex = existingCart.products.findIndex(
                 (p) =>
                     p.productid.toString() === productid.toString() &&  // MongoDB IDs are ObjectIds so converted to string 
@@ -139,9 +142,13 @@ cartroute.get("/", async (req, res) => {
     try {
         const existingCart = await getCart(userId, guestId);
         if (existingCart) {
+            if (userId && !existingCart.user) {
+                existingCart.user = userId;
+                await existingCart.save();
+            }
             res.json(existingCart);
         } else {
-            res.status(404).json({ message: "Cart not found" })
+            res.json({ products: [], totalprice: 0 });
         }
 
     } catch (error) {
@@ -169,6 +176,10 @@ cartroute.put("/", async (req, res) => {
     try {
         const existingCart = await getCart(userId, guestId);
         if (!existingCart) return res.status(404).json({ message: "Cart not found" })
+
+        if (userId && !existingCart.user) {
+            existingCart.user = userId;
+        }
 
         const itemIndex = existingCart.products.findIndex(
             (p) =>
@@ -210,6 +221,10 @@ cartroute.delete("/", async (req, res) => {
     try {
         const existingCart = await getCart(userId, guestId);
         if (!existingCart) return res.status(404).json({ message: "cart not found" });
+
+        if (userId && !existingCart.user) {
+            existingCart.user = userId;
+        }
 
         const initialLength = existingCart.products.length;  // how many products were there 
         existingCart.products = existingCart.products.filter(  // keep all product except the one we want to delete 
