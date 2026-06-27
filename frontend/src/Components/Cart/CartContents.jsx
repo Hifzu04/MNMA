@@ -118,7 +118,7 @@ function CartContents() {
                 </div>
               </div>
               <div>
-                <p>${product.price.toLocaleString()}</p>
+                <p>AED {product.price.toLocaleString()}</p>
                 <button onClick={() => handleRemove(product)}>
                   <RiDeleteBin3Line className="h-6 w-6 mt-2 text-red-600" />
                 </button>

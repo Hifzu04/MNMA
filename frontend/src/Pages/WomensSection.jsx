@@ -188,7 +188,7 @@ export default function WomensSection() {
                     </h4>
 
                     <div className="flex items-center justify-between gap-3 pt-1">
-                      <p className="font-semibold text-base sm:text-lg">₹{product.price}</p>
+                      <p className="font-semibold text-base sm:text-lg">AED {product.price}</p>
 
                       <button className="rounded-full border p-2 sm:p-3 transition hover:bg-black hover:text-white">
                         <ShoppingBag size={16} />

@@ -524,8 +524,8 @@ export default function ProductManagement() {
               <h3 className="text-xl font-bold">{item.name}</h3>
               <p className="text-gray-600 text-sm mb-2">{item.description}</p>
               <div className="grid grid-cols-2 gap-x-4 text-sm">
-                <p><strong>Price:</strong> ₹{item.price}</p>
-                <p><strong>Discount:</strong> ₹{item.discountprice || 0}</p>
+                <p><strong>Price:</strong> AED {item.price}</p>
+                <p><strong>Discount:</strong> AED {item.discountprice || 0}</p>
                 <p><strong>Stock:</strong> {item.countinstock}</p>
                 <p><strong>SKU:</strong> {item.sku}</p>
                 <p><strong>Category:</strong> {item.category}</p>

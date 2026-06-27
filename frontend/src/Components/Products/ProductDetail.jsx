@@ -141,7 +141,7 @@ function ProductDetail() {
             </h1>
 
             <p className="text-2xl font-semibold mb-4">
-              ₹{product.price}
+              AED {product.price}
             </p>
 
             <p className="text-gray-600 mb-6">

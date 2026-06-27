@@ -200,12 +200,12 @@ function BestSeller() {
 
             <div className="flex items-center gap-3 mb-4">
               <p className="text-2xl font-semibold">
-                ₹{product.price}
+                AED {product.price}
               </p>
 
               {product.discountprice && (
                 <p className="text-lg text-gray-400 line-through">
-                  ₹{product.discountprice}
+                  AED {product.discountprice}
                 </p>
               )}
             </div>
