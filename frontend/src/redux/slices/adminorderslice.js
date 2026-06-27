@@ -6,11 +6,11 @@ import axios from "axios";
     {rejectWithValue}
 )=>{
         try {
-           const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders`
+           const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/order`
          ,
            {
   headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("token")}`
             }
            }
         )
@@ -26,11 +26,11 @@ import axios from "axios";
     {rejectWithValue}
 )=>{
         try {
-           const response =  await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}` , {status}
+           const response =  await axios.put(`${import.meta.env.VITE_BACKEND_URL}/api/admin/order/${id}` , {status}
          ,
            {
   headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("token")}`
             }
            }
         )
@@ -46,11 +46,11 @@ import axios from "axios";
     {rejectWithValue}
 )=>{
         try {
-             await axios.delte(`${import.meta.env.VITE_BACKEND_URL}/api/admin/orders/${id}` , 
+             await axios.delte(`${import.meta.env.VITE_BACKEND_URL}/api/admin/order/${id}` , 
          
            {
   headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken")}`
+                Authorization:`Bearer ${localStorage.getItem("token")}`
             }
            }
         )

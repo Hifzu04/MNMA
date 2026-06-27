@@ -8,7 +8,9 @@ import { useParams } from "react-router-dom";
 
 export default function MensSection() {
   const dispatch = useDispatch();
-  const { products, loading } = useSelector((state) => state.product);
+  const { products, loading, filters } = useSelector(
+  (state) => state.product
+);
     const { id } = useParams();
   const [showFilters, setShowFilters] = useState(false); 
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -36,27 +38,30 @@ export default function MensSection() {
 
 
   useEffect(() => {
-    dispatch(
-      fetchproductbyfilters({
-        gender: selectedGender,
-        category: selectedCategory,
-        color: selectedColor,
-        size: selectedSizes.join(","),
-        material: selectedMaterial,
-        limit: 40,
-      })
-    );
-  }, [
-    selectedGender,
-    selectedCategory,
-    selectedColor,
-    selectedSizes,
-    selectedMaterial,
-  ]);
-
+  dispatch(
+    fetchproductbyfilters({
+      gender: selectedGender,
+      category: selectedCategory,
+      color: selectedColor,
+      size: selectedSizes.join(","),
+      material: selectedMaterial,
+      search: filters.search,
+      limit: 40,
+    })
+  );
+}, [
+  dispatch,
+  selectedGender,
+  selectedCategory,
+  selectedColor,
+  selectedSizes,
+  selectedMaterial,
+  filters.search,
+]);
+  console.log(filters.search)
 
   return (
-
+    
     <div className="min-h-screen bg-white">
       {/* Filter Toggle Button - Visible on all screens */}
       <div className="px-4 sm:px-6 py-4 sm:py-5 md:px-6 lg:px-8">

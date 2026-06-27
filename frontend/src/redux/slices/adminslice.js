@@ -2,17 +2,18 @@ import {createSlice , createAsyncThunk} from "@reduxjs/toolkit"
 import axios from "axios"
 
 
-      export const fetchusers = createAsyncThunk("admin/fetchusers" , async()=> {
-
-const response =  await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/users` , 
-    {
-headers:{
-                Authorization:`Bearer ${localStorage.getItem("userToken") || localStorage.getItem("userToken")}`
+      export const fetchusers = createAsyncThunk("admin/fetchusers", async (_, { rejectWithValue }) => {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/admin/users`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token") || localStorage.getItem("userToken")}`
             }
-    }
-)
- return response.data
-
+          });
+          return response.data;
+        } catch (error) {
+          console.error("Fetch users error:", error);
+          return rejectWithValue(error.response?.data?.message || "Failed to fetch users");
+        }
       })
 
 
@@ -81,14 +82,17 @@ headers:{
                 state.loading = true 
                 
             })
-            .addCase(fetchusers.fulfilled , (state , action)=>{
-                state.loading = false 
-                state.users = action.payload
-                 
+            .addCase(fetchusers.fulfilled, (state, action) => {
+                state.loading = false;
+                state.error = null;
+                // Handle both plain array and wrapped object responses
+                state.users = Array.isArray(action.payload)
+                  ? action.payload
+                  : action.payload?.users || [];
             })
-            .addCase(fetchusers.rejected , (state, action)=>{
-                state.loading = false 
-                state.error = action.error.message
+            .addCase(fetchusers.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload || action.error.message;
             })
 
 

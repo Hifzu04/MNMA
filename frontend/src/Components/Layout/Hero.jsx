@@ -31,7 +31,7 @@ function Hero() {
                     </p>
 
                     {/* 6. Polished Button: Consistent casing, wider padding, hover state */}
-                    <Link to="##" className='inline-flex items-center gap-2 px-10 py-3 sm:py-4 bg-white text-gray-950 text-xs sm:text-sm tracking-widest uppercase rounded-sm hover:bg-gray-200 transition-all duration-300 ease-in-out'>
+                    <Link to="collection" className='inline-flex items-center gap-2 px-10 py-3 sm:py-4 bg-white text-gray-950 text-xs sm:text-sm tracking-widest uppercase rounded-sm hover:bg-gray-200 transition-all duration-300 ease-in-out'>
                         Shop Now
                         <BsArrowRightCircle size={16} />
                     </Link>

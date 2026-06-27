@@ -2,19 +2,19 @@ import jwt from "jsonwebtoken"
 import user from "../models/user.js"
 const protect = async (req, res, next) => {
     let token;
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer"))
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
         try {
             token = req.headers.authorization.split(" ")[1]
             const decode = jwt.verify(token, process.env.JWT_SECRET)
-            console.log(decode);  //Dont forget to comment this line before hosting
             req.user = await user.findById(decode.user.id).select("-password")
             next()
         } catch (error) {
             console.error("Token verification failed", error)
-            res.status(401).json({ message: "not authorized , no token provided" })
+            res.status(401).json({ message: "Not authorized, token failed" })
         }
-
-
+    } else {
+        res.status(401).json({ message: "Not authorized, no token provided" })
+    }
 }
 
 const admin = (req, res, next) => {

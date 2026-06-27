@@ -127,6 +127,12 @@ function ProductDetail() {
 
           {/* details */}
           <div className="w-full md:w-1/2">
+             <div className="mb-3">
+              <span className="text-sm text-[#8b7355] uppercase tracking-wider">
+                {product.category}
+              </span>
+            </div>
+
 
             <h1 className="text-3xl font-bold mb-3">
               {product.name}
@@ -139,6 +145,14 @@ function ProductDetail() {
             <p className="text-gray-600 mb-6">
               {product.description}
             </p>
+             {product.rating && (
+              <div className="mb-4">
+                <span className="text-yellow-500 font-medium">
+                  ⭐ {product.rating}
+                </span>
+              </div>
+            )}
+
 
             {/* colors */}
             <div className="mb-5">
