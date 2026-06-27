@@ -51,6 +51,7 @@ res.json({message:"user updated successfully" , user:justtry})
     }
 })
 
+
 adminrouter.delete("/:id", protect , admin , async(req,res)=>{
     try {
         const deletinguser = await user.findById(req.params.id)
