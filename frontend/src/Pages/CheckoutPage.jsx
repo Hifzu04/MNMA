@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchcart } from "../redux/slices/cartslice";
+import { fetchcart, clearcart } from "../redux/slices/cartslice";
 import { createcheckout } from "../redux/slices/checkoutslice";
 import PayPalButton from "../Components/Cart/PayPalButton";
 import axios from "axios";
@@ -113,6 +113,9 @@ export default function CheckoutPage() {
         {},
         config
       );
+
+      // Clear the cart in Redux store and local storage
+      dispatch(clearcart());
 
       localStorage.removeItem("checkoutId");
       

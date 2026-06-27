@@ -65,6 +65,8 @@ function ProductDetail() {
 
     setIsButtonDisabled(true);
 
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+
     try {
       await dispatch(
         addtocart({
@@ -73,7 +75,7 @@ function ProductDetail() {
           size: selectedSize,
           color: selectedColor,
           guestId: localStorage.getItem("guestId"),
-          userId: null,
+          userId: user?._id || null,
         })
       );
 
