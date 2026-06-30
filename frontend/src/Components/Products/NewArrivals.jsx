@@ -160,7 +160,7 @@ export default function NewArrivals() {
                       {product.name}
                     </h4>
                     <p className="mt-1 font-semibold text-gray-200">
-                      ${Number(product.price).toFixed(2)}
+                      AED {Number(product.price).toFixed(2)}
                     </p>
                   </Link>
                 </div>

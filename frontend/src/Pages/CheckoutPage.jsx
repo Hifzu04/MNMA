@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchcart } from "../redux/slices/cartslice";
+import { fetchcart, clearcart } from "../redux/slices/cartslice";
 import { createcheckout } from "../redux/slices/checkoutslice";
 import PayPalButton from "../Components/Cart/PayPalButton";
 import axios from "axios";
@@ -113,6 +113,9 @@ export default function CheckoutPage() {
         {},
         config
       );
+
+      // Clear the cart in Redux store and local storage
+      dispatch(clearcart());
 
       localStorage.removeItem("checkoutId");
       
@@ -290,14 +293,14 @@ export default function CheckoutPage() {
                 ) : (
                   <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
                     <p className="text-sm text-gray-500 mb-1 text-center">
-                      Total: <span className="font-semibold text-gray-800">₹{total.toFixed(2)}</span>
-                      <span className="text-xs text-gray-400 ml-1">(≈ ${(total / 84).toFixed(2)} USD)</span>
+                      Total: <span className="font-semibold text-gray-800">AED {total.toFixed(2)}</span>
+                      <span className="text-xs text-gray-400 ml-1">(≈ ${(total / 3.67).toFixed(2)} USD)</span>
                     </p>
                     <p className="text-xs text-center text-gray-400 mb-4">
                       You will be charged in USD via PayPal
                     </p>
                     <PayPalButton
-                      amount={total}
+                      amount={(total / 3.67).toFixed(2)}
                       onSuccess={handlePaymentSuccess}
                       onError={(err) => {
                         console.error("PayPal error:", err);
@@ -332,7 +335,7 @@ export default function CheckoutPage() {
                       {item.color && <p className="text-xs text-gray-400">Color: {item.color}</p>}
                     </div>
                     <span className="font-semibold text-sm flex-shrink-0">
-                      ₹{(item.price * item.quantity).toFixed(2)}
+                      AED {(item.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -342,7 +345,7 @@ export default function CheckoutPage() {
             <div className="mt-5 space-y-2 border-t pt-4">
               <div className="flex justify-between text-sm text-gray-500">
                 <span>Subtotal</span>
-                <span>₹{subtotal.toFixed(2)}</span>
+                <span>AED {subtotal.toFixed(2)}</span>
               </div>
               <div className="flex justify-between text-sm text-gray-500">
                 <span>Shipping</span>
@@ -350,7 +353,7 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between font-bold text-base border-t pt-3 text-gray-900">
                 <span>Total</span>
-                <span>₹{total.toFixed(2)}</span>
+                <span>AED {total.toFixed(2)}</span>
               </div>
             </div>
           </div>

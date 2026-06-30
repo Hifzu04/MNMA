@@ -81,7 +81,7 @@ export default function Profile() {
 
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("en-IN", {
+    return new Date(dateStr).toLocaleDateString("en-AE", {
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -190,10 +190,10 @@ export default function Profile() {
             },
             {
               label: "Total Spent",
-              value: `₹${totalSpent.toLocaleString("en-IN")}`,
+              value: `AED ${totalSpent.toLocaleString()}`,
               color: "text-violet-600",
               bg: "bg-violet-50",
-              icon: <span className="text-violet-500 font-bold text-sm">₹</span>,
+              icon: <span className="text-violet-500 font-bold text-xs">AED</span>,
             },
           ].map(({ label, value, color, bg, icon }) => (
             <div
@@ -341,7 +341,7 @@ export default function Profile() {
 
                     <div className="text-right flex-shrink-0">
                       <p className="text-sm font-bold text-gray-800">
-                        ₹{order.totalPrice?.toLocaleString("en-IN")}
+                        AED {order.totalPrice?.toLocaleString()}
                       </p>
                       <span
                         className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 ${getStatusStyle(order.status)}`}

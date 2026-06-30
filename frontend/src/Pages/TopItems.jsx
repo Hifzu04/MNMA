@@ -103,7 +103,7 @@ export default function TopItems() {
 
                   <div className="flex items-center justify-between pt-1">
                     <p className="font-semibold text-base sm:text-lg">
-                      ₹{product.price}
+                      AED {product.price}
                     </p>
 
                     <div className="rounded-full border p-2 sm:p-3 transition hover:bg-black hover:text-white">

@@ -24,7 +24,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         <div className="bg-white p-6 rounded-lg shadow border">
           <h3 className="text-lg font-semibold text-gray-700">Revenue</h3>
-          <p className="text-3xl font-bold mt-2">${totalsales.toFixed(2)}</p>
+          <p className="text-3xl font-bold mt-2">AED {totalsales.toFixed(2)}</p>
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow border">
@@ -69,7 +69,7 @@ export default function AdminDashboard() {
                     <td className="p-4 text-sm">{order._id}</td>
                     <td className="p-4 text-sm">{order.user?.name || "Admin User"}</td>
                     <td className="p-4 text-sm font-medium">
-                      ${order.totalprice || order.totalPrice || 0}
+                      AED {order.totalprice || order.totalPrice || 0}
                     </td>
                     <td className="p-4">
                       <span

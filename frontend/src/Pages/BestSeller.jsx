@@ -63,6 +63,8 @@ function BestSeller() {
 
     setIsButtonDisabled(true);
 
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+
     try {
       await dispatch(
         addtocart({
@@ -71,7 +73,7 @@ function BestSeller() {
           size: selectedSize,
           color: selectedColor,
           guestId: localStorage.getItem("guestId"),
-          userId: null,
+          userId: user?._id || null,
         })
       );
 
@@ -198,12 +200,12 @@ function BestSeller() {
 
             <div className="flex items-center gap-3 mb-4">
               <p className="text-2xl font-semibold">
-                ₹{product.price}
+                AED {product.price}
               </p>
 
               {product.discountprice && (
                 <p className="text-lg text-gray-400 line-through">
-                  ₹{product.discountprice}
+                  AED {product.discountprice}
                 </p>
               )}
             </div>

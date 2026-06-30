@@ -68,7 +68,7 @@ export default function OrderManagement() {
                   <td className="p-4 font-medium">{order._id}</td>
                   <td className="p-4">{order.user?.name || "Unknown"}</td>
                   <td className="p-4 font-semibold">
-                    ${order.totalprice || order.totalPrice || 0}
+                    AED {order.totalprice || order.totalPrice || 0}
                   </td>
                   <td className="p-4">
                     <select

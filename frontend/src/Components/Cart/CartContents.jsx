@@ -18,10 +18,11 @@ function CartContents() {
   const cartproducts = cart?.products || [];
    
 
-  // Fetch cart on component mount (add your userId and guestId)
+  // Fetch cart on component mount
   React.useEffect(() => {
-    const userId = localStorage.getItem("userId"); // Replace with your userId
-    const guestId = localStorage.getItem("guestId"); // Replace with your guestId
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const userId = user?._id || null;
+    const guestId = localStorage.getItem("guestId");
     if (userId || guestId) {
       dispatch(fetchcart({ userId, guestId }));
     }
@@ -29,11 +30,13 @@ function CartContents() {
 
   // Handle increment
   const handleIncrement = (product) => {
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const userId = user?._id || null;
     dispatch(updatecartitemquantity({
       productid: product.productid || product._id, 
       quantity: product.quantity + 1,
-      userId: localStorage.getItem("userId"), // Replace with your userId
-      guestId: localStorage.getItem("guestId"), // Replace with your guestId
+      userId,
+      guestId: localStorage.getItem("guestId"),
       size: product.size,
       color: product.color
     }));
@@ -43,11 +46,13 @@ function CartContents() {
   const handleDecrement = (product) => {
     if (product.quantity <= 1) return;
     
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const userId = user?._id || null;
     dispatch(updatecartitemquantity({
       productid: product.productid || product._id, 
       quantity: product.quantity - 1,
-      userId: localStorage.getItem("userId"), // Replace with your userId
-      guestId: localStorage.getItem("guestId"), // Replace with your guestId
+      userId,
+      guestId: localStorage.getItem("guestId"),
       size: product.size,
       color: product.color
     }));
@@ -55,16 +60,18 @@ function CartContents() {
 
   // Handle remove
   const handleRemove = (product) => {
-  dispatch(
-    removefromcart({
-      productid: product.productid || product._id, // FIXED
-      userId: localStorage.getItem("userId"),
-      guestId: localStorage.getItem("guestId"),
-      size: product.size,
-      color: product.color
-    })
-  );
-};
+    const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
+    const userId = user?._id || null;
+    dispatch(
+      removefromcart({
+        productid: product.productid || product._id,
+        userId,
+        guestId: localStorage.getItem("guestId"),
+        size: product.size,
+        color: product.color
+      })
+    );
+  };
 
   // Handle clear entire cart
   const handleClearCart = () => {
@@ -111,7 +118,7 @@ function CartContents() {
                 </div>
               </div>
               <div>
-                <p>${product.price.toLocaleString()}</p>
+                <p>AED {product.price.toLocaleString()}</p>
                 <button onClick={() => handleRemove(product)}>
                   <RiDeleteBin3Line className="h-6 w-6 mt-2 text-red-600" />
                 </button>
